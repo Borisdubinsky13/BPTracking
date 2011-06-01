@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:orientation="vertical" android:id="@+id/graphanalysis">
+	<com.google.ads.AdView android:id="@+id/adDataAnalysis"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		ads:adUnitId="a14d18e1cd0e067" ads:adSize="BANNER" />
+	<TableLayout android:layout_height="wrap_content"
+		android:gravity="top" android:id="@+id/topTable" android:layout_width="wrap_content"
+		android:layout_gravity="center_horizontal">
+		<TableRow>
+			<EditText android:text="Systolic" android:id="@+id/SPressure" android:inputType="numberDecimal"/>
+			<EditText android:text="Diastolic" android:id="@+id/DPressure" android:inputType="numberDecimal"/>
+			<EditText android:text="Pulse" android:id="@+id/pulse" android:inputType="numberDecimal"/>
+		</TableRow>
+	<TableRow>
+		<CheckBox android:text="After meal" android:id="@+id/meal"
+			android:layout_width="wrap_content" android:layout_height="wrap_content">
+		</CheckBox>
+		<TextView> </TextView>
+		<Button android:text="Date" android:layout_width="wrap_content" android:id="@+id/dateButton" android:layout_height="wrap_content"></Button>
+	</TableRow>
+	</TableLayout>
+	<TableLayout android:layout_height="wrap_content"
+		android:gravity="top" android:id="@+id/midTable" android:layout_width="wrap_content"
+		android:layout_gravity="center_horizontal">	
+		<TableRow>
+			<TextView> </TextView>
+			<Button android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:id="@+id/Addprsr"
+				android:text="Add">
+			</Button>
+		</TableRow>
+	</TableLayout>
+		<LinearLayout android:id="@+id/aChart"
+			android:layout_width="fill_parent" android:layout_height="fill_parent"
+			android:orientation="vertical" android:layout_weight="1">
+		</LinearLayout>
+</LinearLayout>
