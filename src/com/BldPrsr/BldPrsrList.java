@@ -7,9 +7,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.ads.*;
 
 public class BldPrsrList extends ListActivity 
@@ -23,8 +25,6 @@ public class BldPrsrList extends ListActivity
 	public static final String PREFS_NAME = "BldPrsrFile";
 	private static final String PREF_USERNAME = "username";	
 	
-	ArrayList<String> indxNames = new ArrayList<String>();
-		
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
@@ -43,22 +43,10 @@ public class BldPrsrList extends ListActivity
     		
     		BldPrsrLogger.i(TAG, SubTag + "Processing column: " + columnIndex);
 
-    		switch ( columnIndex )
-    		{
-    		case 3:	
-    			tmpStr = cursor.getString(cursor.getColumnIndex("sPrsr"));
-    			break;
-    		case 4: 
-    			tmpStr = cursor.getString(cursor.getColumnIndex("dPrsr"));
-    			break;
-    		case 5: 
-    			tmpStr = cursor.getString(cursor.getColumnIndex("pulse"));
-    			break;
-    		default:
-    			tmpStr = "";
-    			break;
-    		}
-
+   			tmpStr = "Systolic: " + cursor.getString(cursor.getColumnIndex("dPrsr"));
+   			tmpStr += ", Diastolic: " + cursor.getString(cursor.getColumnIndex("sPrsr"));
+   			tmpStr += ", Pulse: " + cursor.getString(cursor.getColumnIndex("pulse"));
+    		BldPrsrLogger.i(TAG, SubTag + "String: " + tmpStr);
     		tv.setText(tmpStr);
     		return true;
     	}
@@ -78,35 +66,30 @@ public class BldPrsrList extends ListActivity
 	    BldPrsrLogger.i(TAG, SubTag + "ListRes()"); 
     	SharedPreferences pref = getSharedPreferences(PREFS_NAME,MODE_PRIVATE);   
     	String username = pref.getString(PREF_USERNAME, null);
-
 		this.setTitle("User: " + username);
 		String query = "name = '" + username + "'";
- 		// Cursor	result;
+
 		Uri	tmpUri = Uri.parse("content://com.BldPrsr.provider.userContentProvider");
 		tmpUri = Uri.withAppendedPath(tmpUri,"bpData");
-		this.setTitle("User: " + username);
 		String[] projection = new String[] {
 				"_id",
 				"sPrsr",
 				"dPrsr",
 				"pulse"
 		};
-
 		Cursor result = getContentResolver().query(tmpUri, projection, query, null, null);
 		startManagingCursor(result);
 		
-		String[] columns = new String[] { "sPrsr", "dPrsr", "pulse"  };
-		int[] to = new int[] { R.id.sValue, R.id.dValue, R.id.pulseValue };
+		String[] columns = new String[] { "sPrsr", "dPrsr", "pulse" };
+		int[] to = new int[] { R.id.sValue }; // , R.id.dValue, R.id.pulseValue };
 		
 		BldPrsrLogger.i(TAG, SubTag + "Everything is ready for the adapter. # of records: " + result.getCount());
 		SimpleCursorAdapter  items = new SimpleCursorAdapter(this, R.layout.listnumbers, result, columns, to);
 		BldPrsrLogger.i(TAG, SubTag + "Items information: " + items.getCount() + " entries");
-
         if ( items.getCount() > 0 )
         {
         	items.setViewBinder(new ShowViewBinder());
-        	BldPrsrLogger.i(TAG, SubTag + "Executing setListAdapter()");
-        	setListAdapter(items);
+        	this.setListAdapter(items);
         }
         else
         {

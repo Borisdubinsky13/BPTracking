@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
-  android:orientation="horizontal"
-  android:layout_width="fill_parent" 
-  android:layout_height="fill_parent"
-  android:id="@+id/listres">
-  <com.google.ads.AdView android:id="@+id/adListRes" 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:id="@+id/listres">
+	<com.google.ads.AdView android:id="@+id/adListRes"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		ads:adUnitId="a14d18e1cd0e067" ads:adSize="BANNER" />
+	<ListView android:id="@android:id/list"
 		android:layout_width="fill_parent" 
-		android:layout_height="wrap_content" 
-		ads:adUnitId="a14d18e1cd0e067" 
-		ads:adSize="BANNER"/>
-	<ListView
-		android:id="@android:id/android:list"
-		android:layout_width="fill_parent"
 		android:layout_height="wrap_content" />
 </LinearLayout>

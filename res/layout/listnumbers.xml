@@ -5,18 +5,17 @@
   android:orientation="horizontal"
   android:layout_width="fill_parent" 
   android:layout_height="fill_parent"
-  android:id="@+id/listallres">
+  android:id="@+id/listallre">
+	<TextView android:layout_width="fill_parent" 
+		android:layout_height="wrap_content"
+		android:id="@+id/sValue">
+	</TextView>
  	<TextView android:layout_width="fill_parent" 
-			android:layout_height="wrap_content"
-			android:id="@+id/dValue">
+		android:layout_height="wrap_content"
+		android:id="@+id/dValue">
 	</TextView>
-	 <TextView android:layout_width="fill_parent" 
-			android:layout_height="wrap_content"
-			android:id="@+id/sValue">
+	<TextView android:layout_width="fill_parent" 
+		android:layout_height="wrap_content"
+		android:id="@+id/pulseValue">
 	</TextView>
-	 <TextView android:layout_width="fill_parent" 
-			android:layout_height="wrap_content"
-			android:id="@+id/pulseValue">
-	</TextView>
-	
 </LinearLayout>

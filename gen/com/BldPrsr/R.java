@@ -34,7 +34,7 @@ public final class R {
         public static final int add=0x7f060027;
         public static final int age=0x7f060026;
         public static final int clear=0x7f060028;
-        public static final int dValue=0x7f060015;
+        public static final int dValue=0x7f060016;
         public static final int dateButton=0x7f06000e;
         public static final int dbVersionId=0x7f060005;
         public static final int dispRelNotes=0x7f060006;
@@ -44,7 +44,7 @@ public final class R {
         public static final int graphanalysis=0x7f060007;
         public static final int idName=0x7f060019;
         public static final int lastName=0x7f060023;
-        public static final int listallres=0x7f060014;
+        public static final int listallre=0x7f060014;
         public static final int listres=0x7f060012;
         public static final int loginB=0x7f06001b;
         public static final int main=0x7f060018;
@@ -56,7 +56,7 @@ public final class R {
         public static final int pulse=0x7f06000c;
         public static final int pulseValue=0x7f060017;
         public static final int releasenotes=0x7f06001c;
-        public static final int sValue=0x7f060016;
+        public static final int sValue=0x7f060015;
         public static final int setup=0x7f06002c;
         public static final int setupscr=0x7f06001d;
         public static final int topTable=0x7f060009;
