@@ -10,31 +10,23 @@
 		android:gravity="top" android:id="@+id/topTable" android:layout_width="wrap_content"
 		android:layout_gravity="center_horizontal">
 		<TableRow>
-			<EditText android:text="Systolic" android:id="@+id/SPressure" android:inputType="numberDecimal"/>
-			<EditText android:text="Diastolic" android:id="@+id/DPressure" android:inputType="numberDecimal"/>
-			<EditText android:text="Pulse" android:id="@+id/pulse" android:inputType="numberDecimal"/>
+			<EditText android:text="Systolic" android:id="@+id/SPressure" android:inputType="numberDecimal" android:autoText="false" android:selectAllOnFocus="true"/>
+			<EditText android:text="Diastolic" android:id="@+id/DPressure" android:inputType="numberDecimal" android:autoText="false" android:selectAllOnFocus="true"/>
+			<EditText android:text="Pulse" android:id="@+id/pulse" android:inputType="numberDecimal" android:autoText="false" android:selectAllOnFocus="true"/>
+			<Button android:text="Date" android:layout_height="wrap_content" android:id="@+id/dateButton" android:layout_width="wrap_content"></Button>
 		</TableRow>
-	<TableRow>
-		<CheckBox android:text="After meal" android:id="@+id/meal"
-			android:layout_width="wrap_content" android:layout_height="wrap_content">
-		</CheckBox>
-		<TextView> </TextView>
-		<Button android:text="Date" android:layout_width="wrap_content" android:id="@+id/dateButton" android:layout_height="wrap_content"></Button>
-	</TableRow>
-	</TableLayout>
-	<TableLayout android:layout_height="wrap_content"
-		android:gravity="top" android:id="@+id/midTable" android:layout_width="wrap_content"
-		android:layout_gravity="center_horizontal">	
 		<TableRow>
 			<TextView> </TextView>
+			<TextView> </TextView>
 			<Button android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:id="@+id/Addprsr"
-				android:text="Add">
+					android:layout_height="wrap_content" 
+					android:id="@+id/Addprsr"
+					android:text="Add">
 			</Button>
 		</TableRow>
 	</TableLayout>
-		<LinearLayout android:id="@+id/aChart"
-			android:layout_width="fill_parent" android:layout_height="fill_parent"
-			android:orientation="vertical" android:layout_weight="1">
-		</LinearLayout>
+	<LinearLayout android:id="@+id/aChart"
+		android:layout_width="fill_parent" android:layout_height="fill_parent"
+		android:orientation="vertical" android:layout_weight="1">
+	</LinearLayout>
 </LinearLayout>

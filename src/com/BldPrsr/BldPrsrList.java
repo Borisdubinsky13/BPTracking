@@ -1,13 +1,10 @@
 package com.BldPrsr;
-import java.util.ArrayList;
 import android.app.ListActivity;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,11 +39,28 @@ public class BldPrsrList extends ListActivity
     		String	tmpStr;
     		
     		BldPrsrLogger.i(TAG, SubTag + "Processing column: " + columnIndex);
-
+    		/*
    			tmpStr = "Systolic: " + cursor.getString(cursor.getColumnIndex("dPrsr"));
    			tmpStr += ", Diastolic: " + cursor.getString(cursor.getColumnIndex("sPrsr"));
    			tmpStr += ", Pulse: " + cursor.getString(cursor.getColumnIndex("pulse"));
-    		BldPrsrLogger.i(TAG, SubTag + "String: " + tmpStr);
+   			*/
+
+    		switch ( columnIndex )
+    		{
+    		case 3:
+    			tmpStr = " " + cursor.getString(cursor.getColumnIndex("sPrsr")) + " ";
+    			break;
+    		case 4:
+    			tmpStr = " " + cursor.getString(cursor.getColumnIndex("dPrsr")) + " ";
+    			break;
+    		case 5:
+    			tmpStr = " " + cursor.getString(cursor.getColumnIndex("pulse")) + " ";
+    			break;
+    		default:
+    			BldPrsrLogger.i(TAG, SubTag + "Unknown columnIndex");
+    			tmpStr = "";
+    			return false;
+    		}
     		tv.setText(tmpStr);
     		return true;
     	}
@@ -81,7 +95,7 @@ public class BldPrsrList extends ListActivity
 		startManagingCursor(result);
 		
 		String[] columns = new String[] { "sPrsr", "dPrsr", "pulse" };
-		int[] to = new int[] { R.id.sValue }; // , R.id.dValue, R.id.pulseValue };
+		int[] to = new int[] { R.id.sValue, R.id.dValue, R.id.pulseValue };
 		
 		BldPrsrLogger.i(TAG, SubTag + "Everything is ready for the adapter. # of records: " + result.getCount());
 		SimpleCursorAdapter  items = new SimpleCursorAdapter(this, R.layout.listnumbers, result, columns, to);

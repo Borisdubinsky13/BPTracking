@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
-	android:orientation="vertical" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:id="@+id/listres">
+	android:orientation="vertical" 
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" 
+	android:id="@+id/listres">
 	<com.google.ads.AdView android:id="@+id/adListRes"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		ads:adUnitId="a14d18e1cd0e067" ads:adSize="BANNER" />
-	<ListView android:id="@android:id/list"
-		android:layout_width="fill_parent" 
-		android:layout_height="wrap_content" />
+	<TableLayout android:layout_height="wrap_content"
+		android:gravity="top" android:id="@+id/topTable" 
+		android:layout_width="wrap_content"
+		android:layout_gravity="center_horizontal">
+		<TableRow>
+			<TextView>Systolic</TextView>
+			<TextView>Diastolic</TextView>
+			<TextView>Pulse</TextView>
+		</TableRow>
+		<TableRow>
+			<ListView android:id="@android:id/list"
+				android:layout_width="fill_parent" 
+				android:layout_height="wrap_content" />
+		</TableRow>
+	</TableLayout>
 </LinearLayout>

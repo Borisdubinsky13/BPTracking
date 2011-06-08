@@ -28,7 +28,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -165,17 +164,12 @@ public class BldPrsrMain extends Activity
         	    EditText sPr = (EditText)findViewById(R.id.DPressure);
         	    EditText dPr = (EditText)findViewById(R.id.SPressure);
         	    EditText pulse = (EditText)findViewById(R.id.pulse);
-        	    CheckBox meal = (CheckBox)findViewById(R.id.meal);
         	    
             	vals.put("name", username);
             	vals.put("mDate", dateB.getText().toString());
             	vals.put("dPrsr", dPr.getText().toString());
             	vals.put("sPrsr", sPr.getText().toString());
             	vals.put("pulse", pulse.getText().toString());
-            	if ( meal.isChecked() )
-            		vals.put("afterMeal", "Yes");
-            	else
-            		vals.put("afterMeal", "No");
 
     			ContentResolver cr = getContentResolver();
     			BldPrsrLogger.i(TAG, SubTag + "Got content resolver");
