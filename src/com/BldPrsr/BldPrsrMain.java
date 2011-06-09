@@ -77,7 +77,7 @@ public class BldPrsrMain extends Activity
 	    switch (item.getItemId()) 
 	    {
 	    case R.id.List:
-	    	BldPrsrLogger.i(TAG, SubTag + "User " + "trying to start ABOUT");
+	    	BldPrsrLogger.i(TAG, SubTag + "User " + "trying to start List");
 	        startActivity(iList);
 	        return true;	
 	    case R.id.About:

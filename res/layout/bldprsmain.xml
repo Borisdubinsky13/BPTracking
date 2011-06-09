@@ -15,9 +15,11 @@
 			<EditText android:text="Pulse" android:id="@+id/pulse" android:inputType="numberDecimal" android:autoText="false" android:selectAllOnFocus="true"/>
 			<Button android:text="Date" android:layout_height="wrap_content" android:id="@+id/dateButton" android:layout_width="wrap_content"></Button>
 		</TableRow>
+	</TableLayout>
+	<TableLayout android:layout_height="wrap_content"
+		android:gravity="top" android:id="@+id/topTable" android:layout_width="wrap_content"
+		android:layout_gravity="center_horizontal">
 		<TableRow>
-			<TextView> </TextView>
-			<TextView> </TextView>
 			<Button android:layout_width="wrap_content"
 					android:layout_height="wrap_content" 
 					android:id="@+id/Addprsr"

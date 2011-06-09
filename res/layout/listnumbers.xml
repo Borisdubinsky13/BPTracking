@@ -6,23 +6,23 @@
   android:layout_width="fill_parent" 
   android:layout_height="fill_parent"
   android:id="@+id/listallre">
-  <TableLayout android:layout_height="wrap_content"
+	<TableLayout android:layout_height="wrap_content"
 		android:gravity="top" android:id="@+id/topTable" 
-		android:layout_width="wrap_content"
+		android:layout_width="fill_parent"
 		android:layout_gravity="center_horizontal">
-	<TableRow>
-	<TextView android:layout_width="fill_parent" 
-		android:layout_height="wrap_content"
-		android:id="@+id/sValue">
-	</TextView>
- 	<TextView android:layout_width="fill_parent" 
-		android:layout_height="wrap_content"
-		android:id="@+id/dValue">
-	</TextView>
-	<TextView android:layout_width="fill_parent" 
-		android:layout_height="wrap_content"
-		android:id="@+id/pulseValue">
-	</TextView>
-	</TableRow>
+		<TableRow>
+			<TextView android:layout_width="fill_parent" 
+				android:layout_height="fill_parent"
+				android:id="@+id/sValue">
+			</TextView>
+		 	<TextView android:layout_width="fill_parent" 
+				android:layout_height="fill_parent"
+				android:id="@+id/dValue">
+			</TextView>
+			<TextView android:layout_width="fill_parent" 
+				android:layout_height="fill_parent"
+				android:id="@+id/pulseValue">
+			</TextView>
+		</TableRow>
 	</TableLayout>
 </LinearLayout>

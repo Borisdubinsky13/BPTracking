@@ -17,7 +17,7 @@ public class BldPrsrList extends ListActivity
 	 * 
 	 */
 	public static String TAG="BldPrsr";
-	public static String SubTag="BldPrsrMain: ";
+	public static String SubTag="BldPrsrList: ";
 		
 	public static final String PREFS_NAME = "BldPrsrFile";
 	private static final String PREF_USERNAME = "username";	
@@ -48,13 +48,13 @@ public class BldPrsrList extends ListActivity
     		switch ( columnIndex )
     		{
     		case 3:
-    			tmpStr = " " + cursor.getString(cursor.getColumnIndex("sPrsr")) + " ";
+    			tmpStr = cursor.getString(cursor.getColumnIndex("sPrsr")) + ":";
     			break;
     		case 4:
-    			tmpStr = " " + cursor.getString(cursor.getColumnIndex("dPrsr")) + " ";
+    			tmpStr = cursor.getString(cursor.getColumnIndex("dPrsr")) + ":";
     			break;
     		case 5:
-    			tmpStr = " " + cursor.getString(cursor.getColumnIndex("pulse")) + " ";
+    			tmpStr = cursor.getString(cursor.getColumnIndex("pulse"));
     			break;
     		default:
     			BldPrsrLogger.i(TAG, SubTag + "Unknown columnIndex");
@@ -76,7 +76,13 @@ public class BldPrsrList extends ListActivity
 		AdView	adView = (AdView)findViewById(R.id.adListRes);
 		// Initiate a generic request to load it with an ad
 	    adView.loadAd(new AdRequest());
-	        
+/*
+		TextView th = new TextView(this);
+		ListView lv = (ListView) findViewById(R.id.List);
+		th.setText("Systolic:Diastolic:Pulse");
+		
+		lv.addHeaderView(th);
+*/
 	    BldPrsrLogger.i(TAG, SubTag + "ListRes()"); 
     	SharedPreferences pref = getSharedPreferences(PREFS_NAME,MODE_PRIVATE);   
     	String username = pref.getString(PREF_USERNAME, null);
