@@ -161,8 +161,8 @@ public class BldPrsrMain extends Activity
             	
             	BldPrsrLogger.i(TAG, SubTag + "Adding record to the DB");
             	
-        	    EditText sPr = (EditText)findViewById(R.id.DPressure);
-        	    EditText dPr = (EditText)findViewById(R.id.SPressure);
+        	    EditText sPr = (EditText)findViewById(R.id.SPressure);
+        	    EditText dPr = (EditText)findViewById(R.id.DPressure);
         	    EditText pulse = (EditText)findViewById(R.id.pulse);
         	    
             	vals.put("name", username);

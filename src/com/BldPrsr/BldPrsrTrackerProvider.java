@@ -27,7 +27,7 @@ public class BldPrsrTrackerProvider extends ContentProvider
 	public static String SubTag="BldPrsrTrackerProvider: ";
 
 	private static final String DATABASE_NAME = "bldprsr.db";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	
 	private static final String BPUSER_TABLE_NAME = "bpUsers";
 	private static final String BPDATA_TABLE_NAME = "bpData";
@@ -108,14 +108,11 @@ public class BldPrsrTrackerProvider extends ContentProvider
 				if (c.getCount()==0) 
 				{
 					db.execSQL("CREATE TABLE " + BPDATA_TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-							"uid TEXT, " +
 							"name TEXT, " +
 							"mDate DATE, " +
 							"sPrsr TEXT, " +
 							"dPrsr TEXT, " +
-							"pulse TEXT, " +
-							"afterMeal TEXT, " +
-							"notes TEXT" +
+							"pulse TEXT" +
  							");");
 				}
 
@@ -140,51 +137,53 @@ public class BldPrsrTrackerProvider extends ContentProvider
 		{
 			BldPrsrLogger.i(TAG , SubTag + "starting an upgrade from " + oldVersion + " to " + newVersion);
 			// First rename the table to <table>_OLD
-			/* No conversion for the database vers 1 */
-			/* This is commented to be an example
-			String sql = null;
-			Cursor from;
-
+			/* 
+			 * This is a first upgrade.
+			 */
 			try
 			{
-				if ( oldVersion <= 6 )
+				Cursor from;
+				String sql = "ALTER TABLE " + BPDATA_TABLE_NAME + " RENAME TO " + BPDATA_TABLE_NAME + "_OLD;";
+				BldPrsrLogger.i(TAG, SubTag + "exec sql: " + sql);
+				db.execSQL(sql);
+				
+				sql = "CREATE TABLE " + BPDATA_TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+						"name TEXT, " +
+						"mDate DATE, " +
+						"sPrsr TEXT, " +
+						"dPrsr TEXT, " +
+						"pulse TEXT" +
+							");";
+				db.execSQL(sql);
+				BldPrsrLogger.i(TAG, SubTag + "exec sql: " + sql);
+				sql = "SELECT * FROM " + BPDATA_TABLE_NAME + "_OLD;";
+				BldPrsrLogger.i(TAG, SubTag + "exec sql: " + sql);
+				from = db.rawQuery(sql,null);
+				if ( from.moveToFirst() )
 				{
-					sql = "ALTER TABLE " + USER_TABLE_NAME + " RENAME TO " + USER_TABLE_NAME + "_OLD;";
-					BldPrsrLogger.i(TAG, SubTag + "exec sql: " + sql);
-					db.execSQL(sql);
-
-					sql = "CREATE TABLE " + 
-						USER_TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-						"name TEXT UNIQUE, " +
-						"passwd TEXT, " +
-						"firstName TEXT, " +
-						"lastName TEXT, " +
-						"email TEXT);";
-					BldPrsrLogger.i(TAG, SubTag + "exec sql: " + sql);
-					db.execSQL(sql);
-
-					sql = "SELECT name,email,passwd FROM " + USER_TABLE_NAME + "_OLD;";
-					BldPrsrLogger.i(TAG, SubTag + "exec sql: " + sql);
-					from = db.rawQuery(sql,null);
-					if ( from.moveToFirst() )
+					do
 					{
-						do
-						{
-							ContentValues vals = new ContentValues();
-							vals.put("name", from.getString(0));
-							vals.put("email", from.getString(1));
-							vals.put("passwd", from.getString(2));
-							BldPrsrLogger.i(TAG, SubTag + "adding record");
-							db.insert(USER_TABLE_NAME,null,vals);
-						} while ( from.moveToNext() );
+						ContentValues vals = new ContentValues();
 
-						sql = "DROP TABLE IF EXISTS " + USER_TABLE_NAME + "_OLD;";
-						BldPrsrLogger.i(TAG, SubTag + "exec sql: " + sql);
-						db.execSQL(sql);
-					}
+						vals.put("name", from.getString(from.getColumnIndex("name")));
+						vals.put("mDate", from.getString(from.getColumnIndex("mDate")));
+						vals.put("sPrsr", from.getString(from.getColumnIndex("dPrsr")));
+						vals.put("dPrsr", from.getString(from.getColumnIndex("sPrsr")));
+						vals.put("pulse", from.getString(from.getColumnIndex("pulse")));
+
+						db.insert(BPDATA_TABLE_NAME,null,vals);
+					} while ( from.moveToNext() );
 				}
+				sql = "DROP TABLE IF EXISTS " + BPDATA_TABLE_NAME + "_OLD;";
+				BldPrsrLogger.i(TAG, SubTag + "exec sql: " + sql);
+				db.execSQL(sql);
 			}
-			*/
+			catch (Exception e)
+			{
+				BldPrsrLogger.e(TAG, SubTag + e.getMessage());
+				String sql = "DROP TABLE IF EXISTS " + BPDATA_TABLE_NAME + "_OLD;";
+				db.execSQL(sql);
+			}
 		}
 	}
 
@@ -308,7 +307,7 @@ public class BldPrsrTrackerProvider extends ContentProvider
 				case BPDATA:
 					BldPrsrLogger.i(TAG, SubTag + "building query for DATA table");
 
-					sqlStm += "_id,name,mDate,dPrsr,sPrsr,pulse,afterMeal FROM ";
+					sqlStm += "_id,name,mDate,dPrsr,sPrsr,pulse FROM ";
 					sqlStm += BPDATA_TABLE_NAME;
 					if ( selection != null )
 					{
@@ -411,14 +410,11 @@ public class BldPrsrTrackerProvider extends ContentProvider
 		BPUSER_PROJECTION_MAP.put(BPUSER_TABLE_NAME, "age");
 
 		BPDATA_PROJECTION_MAP = new HashMap<String,String>();
-		BPDATA_PROJECTION_MAP.put(BPDATA_TABLE_NAME, "uid" );
 		BPDATA_PROJECTION_MAP.put(BPDATA_TABLE_NAME, "name" );
 		BPDATA_PROJECTION_MAP.put(BPDATA_TABLE_NAME, "mDate" );
 		BPDATA_PROJECTION_MAP.put(BPDATA_TABLE_NAME, "dPrsr");
 		BPDATA_PROJECTION_MAP.put(BPDATA_TABLE_NAME, "sPrsr");
 		BPDATA_PROJECTION_MAP.put(BPDATA_TABLE_NAME, "pulse");
-		BPDATA_PROJECTION_MAP.put(BPDATA_TABLE_NAME, "beforeMeal");
-		BPDATA_PROJECTION_MAP.put(BPDATA_TABLE_NAME, "notes");
 		
 		BPSTAT_PROJECTION_MAP = new HashMap<String,String>();
 		BPSTAT_PROJECTION_MAP.put(BPSTATUS_TABLE_NAME, "name");

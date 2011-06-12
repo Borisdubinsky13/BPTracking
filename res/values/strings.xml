@@ -16,7 +16,7 @@
     <string name="appNoteVal">     Please specify \'BPTracker\' in the subject of your e-mail.</string>
     <string name="appContact">Contact:</string>
     <string name="appname">BPTracker</string>
-    <string name="dbVersion">      1</string>
+    <string name="dbVersion">     2</string>
 	<string name="dbVersionLabel">Database Version: </string>
 	<string name="dispRelNotes">Display Release Notes</string>
 	<string name="setupTitle">Setup an Account</string>
