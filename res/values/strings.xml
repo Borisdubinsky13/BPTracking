@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">BldPrsr</string>
-    <string name="Name">Name: </string>
-    <string name="passStr">Password:</string>
-    <string name="login">Login</string>
-    <string name="setupName">Setup</string>
-    <string name="aboutName">About</string>
-    <string name="applabl">Application:</string>
-    <string name="appdescrip">     Blood Pressure Tracker</string>
-    <string name="appVerLabel">Version:</string>
-    <string name="appVer">     R-1.0</string>
+	<string name="app_name">BldPrsr</string>
+	<string name="Name">Name: </string>
+	<string name="passStr">Password:</string>
+	<string name="login">Login</string>
+	<string name="setupName">Setup</string>
+	<string name="aboutName">About</string>
+	<string name="applabl">Application:</string>
+	<string name="appdescrip"> Blood Pressure Tracker</string>
+	<string name="appVerLabel">Version:</string>
+	<string name="appVer"> R-1.0</string>
 	<string name="AddResName">Add Result</string>
-    <string name="appContVal">     dubi13@gmail.com</string>
-    <string name="appNote">NOTE: </string>
-    <string name="appNoteVal">     Please specify \'BPTracker\' in the subject of your e-mail.</string>
-    <string name="appContact">Contact:</string>
-    <string name="appname">BPTracker</string>
-    <string name="dbVersion">     2</string>
+	<string name="appContVal"> dubi13@gmail.com</string>
+	<string name="appNote">NOTE: </string>
+	<string name="appNoteVal"> Please specify \'BPTracker\' in the subject of
+		your e-mail.</string>
+	<string name="appContact">Contact:</string>
+	<string name="appname">BPTracker</string>
+	<string name="dbVersion"> 2</string>
 	<string name="dbVersionLabel">Database Version: </string>
 	<string name="dispRelNotes">Display Release Notes</string>
 	<string name="setupTitle">Setup an Account</string>
 	<string name="lastNameStr">Last Name: </string>
-    <string name="firstNameStr">First Name: </string>
+	<string name="firstNameStr">First Name: </string>
 	<string name="email">E-Mail:</string>
 	<string name="add">Add</string>
 	<string name="Cancel">Cancel</string>
@@ -29,4 +30,5 @@
 	<string name="age">Age</string>
 	<string name="logoutStr">Logout</string>
 	<string name="listStr">List Numbers</string>
+	<string name="adduser">Add User</string>
 </resources>

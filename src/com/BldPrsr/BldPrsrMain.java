@@ -14,6 +14,7 @@ import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.backup.BackupManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -49,9 +50,7 @@ public class BldPrsrMain extends Activity
 			"mDate",
 			"dPrsr",
 			"sPrsr",
-			"pulse",
-			"afterMeal",
-			"notes TEXT"
+			"pulse"
 	};
 	
 	String eventDate;
@@ -59,6 +58,8 @@ public class BldPrsrMain extends Activity
 	Button addB;
 	String username;
 
+    BackupManager mBackupManager;
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
 	{
@@ -72,10 +73,15 @@ public class BldPrsrMain extends Activity
 	{
 		Intent iAbout = new Intent(this, AboutHandler.class);
 		Intent iList = new Intent(this, BldPrsrList.class);
+		Intent iAddUser = new Intent(this, BldPrsrSetupWin.class);
 
 		// Handle item selection
 	    switch (item.getItemId()) 
 	    {
+	    case R.id.AddUser:
+	    	BldPrsrLogger.i(TAG, SubTag + "User " + "trying to start AddUser");
+	        startActivity(iAddUser);
+	        return true;	
 	    case R.id.List:
 	    	BldPrsrLogger.i(TAG, SubTag + "User " + "trying to start List");
 	        startActivity(iList);
@@ -113,6 +119,8 @@ public class BldPrsrMain extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bldprsmain);
+        
+        mBackupManager = new BackupManager(this);
     }
     
 	@Override
@@ -172,20 +180,20 @@ public class BldPrsrMain extends Activity
             	vals.put("pulse", pulse.getText().toString());
 
     			ContentResolver cr = getContentResolver();
-    			BldPrsrLogger.i(TAG, SubTag + "Got content resolver");
     			Uri	tmpUri = Uri.parse("content://com.BldPrsr.provider.userContentProvider");
     			tmpUri = Uri.withAppendedPath(tmpUri,"bpData");
-    			BldPrsrLogger.i(TAG, SubTag + "Got URI populated");        			
     			cr.insert(tmpUri, vals);            	
                 
+    			mBackupManager.dataChanged();
+    			
                 /* Refresh the view that has the chart */
     			XYSeries diastolic = new XYValueSeries("Diastolic");
     			XYSeries systolic = new XYValueSeries("Systolic");
     			XYSeries sPulse = new XYValueSeries("Pulse");
 
     			String	query = null;
-				double  cnt = 0;
-				double	min=0,max=0;
+				int  cnt = 0;
+				int	min=0,max=0;
 				
     			query = "name = '" + username + "'";
     			BldPrsrLogger.i(TAG, SubTag + "Query: " + query);
@@ -199,14 +207,14 @@ public class BldPrsrMain extends Activity
     					String value;
     					do
     					{
-    						double dValue;
+    						int dValue;
     			
     						value = result.getString(result.getColumnIndex("dPrsr"));
     						BldPrsrLogger.i(TAG, SubTag + "dPrsr: " + value);
     						if ( value.equals("") )
     							dValue = 0;
     						else
-    							dValue = Double.parseDouble(value);
+    							dValue = Integer.parseInt(value);
     						diastolic.add(cnt, dValue);
     						if ( cnt == 0 )
     							min = max = dValue;
@@ -223,7 +231,7 @@ public class BldPrsrMain extends Activity
     						if ( value.equals("") )
     							dValue = 0;
     						else
-    							dValue = Double.parseDouble(value);
+    							dValue = Integer.parseInt(value);
 							if ( dValue > max )
 								max = dValue;
 							if ( dValue < min )
@@ -235,7 +243,7 @@ public class BldPrsrMain extends Activity
     						if ( value.equals("") )
     							dValue = 0;
     						else
-    							dValue = Double.parseDouble(value);
+    							dValue = Integer.parseInt(value);
 							if ( dValue > max )
 								max = dValue;
 							if ( dValue < min )
@@ -269,8 +277,8 @@ public class BldPrsrMain extends Activity
     		    mRenderer.setYTitle("");
     		    mRenderer.setXAxisMin(0);
     		    mRenderer.setXAxisMax(cnt);
-    		    mRenderer.setYAxisMin((double)min-5);
-    		    mRenderer.setYAxisMax((double)max);
+    		    mRenderer.setYAxisMin(min-5);
+    		    mRenderer.setYAxisMax(max);
     		    mRenderer.setAxesColor(Color.WHITE);
     		    mRenderer.setLabelsColor(Color.WHITE);
     		    
@@ -310,8 +318,8 @@ public class BldPrsrMain extends Activity
 		XYSeries sPulse = new XYValueSeries("Pulse");
 
 		String	query = null;
-		double  cnt = 0;
-		double	min=0,max=0;
+		int  cnt = 0;
+		int	min=0,max=0;
 		
 		query = "name = '" + username + "'";
 		BldPrsrLogger.i(TAG, SubTag + "Query: " + query);
@@ -328,48 +336,48 @@ public class BldPrsrMain extends Activity
 				String value;
 				do
 				{
-					double dValue;
+					int iValue;
 		
 					value = result.getString(result.getColumnIndex("dPrsr"));
 					BldPrsrLogger.i(TAG, SubTag + "dPrsr: " + value);
 					if ( value.equals("") )
-						dValue = 0;
+						iValue = 0;
 					else
-						dValue = Double.parseDouble(value);
-					diastolic.add(cnt, dValue);
+						iValue = Integer.parseInt(value);
+					diastolic.add(cnt, iValue);
 					if ( cnt == 0 )
-						min = max = dValue;
+						min = max = iValue;
 					else
 					{
-						if ( dValue > max )
-							max = dValue;
-						if ( dValue < min )
-							min = dValue;
+						if ( iValue > max )
+							max = iValue;
+						if ( iValue < min )
+							min = iValue;
 					}
 					
 					value = result.getString(result.getColumnIndex("sPrsr"));
 					BldPrsrLogger.i(TAG, SubTag + "sPrsr: " + value);
 					if ( value.equals("") )
-						dValue = 0;
+						iValue = 0;
 					else
-						dValue = Double.parseDouble(value);
-					if ( dValue > max )
-						max = dValue;
-					if ( dValue < min )
-						min = dValue;
-					systolic.add(cnt, dValue);
+						iValue = Integer.parseInt(value);
+					if ( iValue > max )
+						max = iValue;
+					if ( iValue < min )
+						min = iValue;
+					systolic.add(cnt, iValue);
 					
 					value = result.getString(result.getColumnIndex("pulse"));
 					BldPrsrLogger.i(TAG, SubTag + "pulse: " + value);
 					if ( value.equals("") )
-						dValue = 0;
+						iValue = 0;
 					else
-						dValue = Double.parseDouble(value);
-					if ( dValue > max )
-						max = dValue;
-					if ( dValue < min )
-						min = dValue;
-					sPulse.add(cnt, dValue);
+						iValue = Integer.parseInt(value);
+					if ( iValue > max )
+						max = iValue;
+					if ( iValue < min )
+						min = iValue;
+					sPulse.add(cnt, iValue);
 					
 					cnt ++;
 
@@ -398,8 +406,8 @@ public class BldPrsrMain extends Activity
 	    mRenderer.setYTitle("");
 	    mRenderer.setXAxisMin(0);
 	    mRenderer.setXAxisMax(cnt);
-	    mRenderer.setYAxisMin((double)min - 5);
-	    mRenderer.setYAxisMax((double)max);
+	    mRenderer.setYAxisMin(min - 5);
+	    mRenderer.setYAxisMax(max);
 	    mRenderer.setAxesColor(Color.WHITE);
 	    mRenderer.setLabelsColor(Color.WHITE);
 	    
@@ -441,9 +449,8 @@ public class BldPrsrMain extends Activity
 			String evMonthS = String.format("%02d", monthOfYear+1);
 			String evDayS =  String.format("%02d", dayOfMonth);
 
-			eventDate = evMonthS + "/" + evDayS + "/" + evYearS;
+			eventDate = evYearS + "/" + evMonthS + "/" + evDayS;
 			dateB.setText(eventDate);
 		}
     };    	
-
 }

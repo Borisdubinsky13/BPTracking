@@ -1,18 +1,20 @@
 package com.BldPrsr;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.ads.*;
 
 public class BldPrsrList extends ListActivity 
 {
+
 	/**
 	 * 
 	 */
@@ -21,6 +23,8 @@ public class BldPrsrList extends ListActivity
 		
 	public static final String PREFS_NAME = "BldPrsrFile";
 	private static final String PREF_USERNAME = "username";	
+	
+	private static final String PREF_ID = "dataTBL_ID";
 	
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -116,4 +120,27 @@ public class BldPrsrList extends ListActivity
 			finish();
         }
 	}
+	/* (non-Javadoc)
+	 * @see android.app.ListActivity#onListItemClick(android.widget.ListView, android.view.View, int, long)
+	 */
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		// TODO Auto-generated method stub
+		super.onListItemClick(l, v, position, id);
+		
+		// TODO Auto-generated method stub
+		BldPrsrLogger.i(TAG, SubTag + "Clicked on position: " + position );
+		super.onListItemClick(l, v, position, id);
+		
+		// Save the entry in the preferences, so the display activity can display an appropriate record
+        getSharedPreferences(PREFS_NAME,MODE_PRIVATE)
+       	.edit()
+    	.putString(PREF_ID, position + "")
+    	.commit();
+
+    	Intent iDataEntry = new Intent(this, BldPrsrHandleDetailEntry.class);
+
+        startActivity(iDataEntry);
+	}
+
 }

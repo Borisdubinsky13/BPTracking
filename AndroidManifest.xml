@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.BldPrsr"
-      android:versionCode="3" android:versionName="1.2">
-    <application android:icon="@drawable/bloodpressure" android:label="@string/app_name">
+      android:versionName="2.0" android:versionCode="4">
+    <application android:icon="@drawable/bloodpressure" android:label="@string/app_name" android:backupAgent="MyBackupAgent">
+    	<meta-data android:name="com.google.android.backup.api_key"
+    		android:value="AEdPqrEAAAAIJ88pyQvb_deS1rWLOor4qfbfI-Z-SzaJt_WbNw" />
         <activity android:label="@string/appname" android:name="com.BldPrsr.BldPrstLoginHandler">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,7 +39,13 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 		</activity>
-		
+	    <activity android:label="@string/setupName" android:name="com.BldPrsr.BldPrsrHandleDetailEntry">
+	    	<intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.PICK" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+		</activity>		
 		<activity android:name="org.achartengine.GraphicalActivity"/>
 		<activity android:name="com.google.ads.AdActivity"
               android:configChanges="keyboard|keyboardHidden|orientation"/>
