@@ -31,4 +31,6 @@
 	<string name="logoutStr">Logout</string>
 	<string name="listStr">List Numbers</string>
 	<string name="adduser">Add User</string>
+	<string name="delStr">Delete</string>
+	<string name="updSelection">Update</string>
 </resources>

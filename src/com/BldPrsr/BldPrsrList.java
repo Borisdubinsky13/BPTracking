@@ -1,11 +1,18 @@
 package com.BldPrsr;
 import android.app.ListActivity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -26,6 +33,7 @@ public class BldPrsrList extends ListActivity
 	
 	private static final String PREF_ID = "dataTBL_ID";
 	
+	public SimpleCursorAdapter  items;
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
@@ -51,6 +59,9 @@ public class BldPrsrList extends ListActivity
 
     		switch ( columnIndex )
     		{
+    		case 0:
+    			tmpStr = cursor.getString(cursor.getColumnIndex("_id")) + ":";
+    			break;
     		case 3:
     			tmpStr = cursor.getString(cursor.getColumnIndex("dPrsr")) + ":";
     			break;
@@ -62,7 +73,7 @@ public class BldPrsrList extends ListActivity
     			tmpStr = cursor.getString(cursor.getColumnIndex("pulse"));
     			break;
     		default:
-    			BldPrsrLogger.i(TAG, SubTag + "Unknown columnIndex");
+    			BldPrsrLogger.i(TAG, SubTag + "Unknown columnIndex" + columnIndex);
     			tmpStr = "";
     			return false;
     		}
@@ -77,7 +88,9 @@ public class BldPrsrList extends ListActivity
 	{
 		super.onResume();
 		setContentView(R.layout.list);
-
+		
+		registerForContextMenu(getListView());
+		
 		AdView	adView = (AdView)findViewById(R.id.adListRes);
 		// Initiate a generic request to load it with an ad
 	    adView.loadAd(new AdRequest());
@@ -99,11 +112,11 @@ public class BldPrsrList extends ListActivity
 		Cursor result = getContentResolver().query(tmpUri, projection, query, null, null);
 		startManagingCursor(result);
 		
-		String[] columns = new String[] { "sPrsr", "dPrsr", "pulse" };
-		int[] to = new int[] { R.id.sValue, R.id.dValue, R.id.pulseValue };
+		String[] columns = new String[] { "_id", "sPrsr", "dPrsr", "pulse" };
+		int[] to = new int[] { R.id.sID, R.id.sValue, R.id.dValue, R.id.pulseValue };
 		
 		BldPrsrLogger.i(TAG, SubTag + "Everything is ready for the adapter. # of records: " + result.getCount());
-		SimpleCursorAdapter  items = new SimpleCursorAdapter(this, R.layout.listnumbers, result, columns, to);
+		items = new SimpleCursorAdapter(this, R.layout.listnumbers, result, columns, to);
 		BldPrsrLogger.i(TAG, SubTag + "Items information: " + items.getCount() + " entries");
         if ( items.getCount() > 0 )
         {
@@ -120,27 +133,71 @@ public class BldPrsrList extends ListActivity
 			finish();
         }
 	}
+	
 	/* (non-Javadoc)
 	 * @see android.app.ListActivity#onListItemClick(android.widget.ListView, android.view.View, int, long)
 	 */
 	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
+	protected void onListItemClick(ListView l, View v, int position, long id) 
+	{
 		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
 		
 		// TODO Auto-generated method stub
-		BldPrsrLogger.i(TAG, SubTag + "Clicked on position: " + position );
+		BldPrsrLogger.i(TAG, SubTag + "Clicked on position: " + position + ", id: " + id );
 		super.onListItemClick(l, v, position, id);
 		
 		// Save the entry in the preferences, so the display activity can display an appropriate record
         getSharedPreferences(PREFS_NAME,MODE_PRIVATE)
        	.edit()
-    	.putString(PREF_ID, position + "")
+    	.putString(PREF_ID, id + "")
     	.commit();
 
     	Intent iDataEntry = new Intent(this, BldPrsrHandleDetailEntry.class);
 
         startActivity(iDataEntry);
 	}
+	
+	@Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) 
+    {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        BldPrsrLogger.i(TAG, SubTag + "Creating a context menu");
+        menu.setHeaderTitle("Menu:");
+        inflater.inflate(R.menu.detailentrymenu, menu);
+    }
 
+	public boolean onContextItemSelected(MenuItem item) 
+	{
+        AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+	    switch(item.getItemId()) 
+	    {
+	    case R.id.delSelection:
+	        AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+	        
+	        BldPrsrLogger.i(TAG, SubTag + "Clicked on position: " + info.id );
+	        // To get the id of the clicked item in the list use menuInfo.id
+	        BldPrsrLogger.i(TAG, SubTag + "list pos:"+menuInfo.position+" id:"+menuInfo.id);
+	    	ContentResolver cr = getContentResolver();
+	    	String	query = "_ID = '" + menuInfo.id + "'";
+	    	Uri	tmpUri = Uri.parse("content://com.BldPrsr.provider.userContentProvider");
+	    	 
+	    	tmpUri = Uri.withAppendedPath(tmpUri,"bpData");
+	    	cr.delete(tmpUri, query, null);
+	        return true;
+	    case R.id.updSelection:
+			// Save the entry in the preferences, so the display activity can display an appropriate record
+	        getSharedPreferences(PREFS_NAME,MODE_PRIVATE)
+	       		.edit()
+	       		.putString(PREF_ID, menuInfo.id + "")
+	       		.commit();
+
+	    	Intent iDataEntry = new Intent(this, BldPrsrHandleDetailEntry.class);
+
+	        startActivity(iDataEntry);
+	    	return true;
+	    }
+	    return super.onContextItemSelected(item);
+	}
 }
