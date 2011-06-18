@@ -14,7 +14,6 @@ import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.backup.BackupManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -57,8 +56,6 @@ public class BldPrsrMain extends Activity
 	Button dateB;
 	Button addB;
 	String username;
-
-    BackupManager mBackupManager;
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
@@ -119,8 +116,6 @@ public class BldPrsrMain extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bldprsmain);
-        
-        mBackupManager = new BackupManager(this);
     }
     
 	@Override
@@ -184,8 +179,6 @@ public class BldPrsrMain extends Activity
     			tmpUri = Uri.withAppendedPath(tmpUri,"bpData");
     			cr.insert(tmpUri, vals);            	
                 
-    			mBackupManager.dataChanged();
-    			
                 /* Refresh the view that has the chart */
     			XYSeries diastolic = new XYValueSeries("Diastolic");
     			XYSeries systolic = new XYValueSeries("Systolic");

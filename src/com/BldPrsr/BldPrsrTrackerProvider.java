@@ -8,6 +8,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
+import android.app.backup.BackupManager;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
@@ -46,6 +47,8 @@ public class BldPrsrTrackerProvider extends ContentProvider
 	
 	private static final UriMatcher sURIMatcher = buildUriMatcher();
 	
+	private static BackupManager mBackupManager;
+	
 	public static String getMd5Hash(String input) 
 	{
         try {
@@ -79,11 +82,13 @@ public class BldPrsrTrackerProvider extends ContentProvider
 		public DbAdapter(Context context) 
 		{
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
+			mBackupManager = new BackupManager(context);
 		}
 
 		@Override
 		public void onCreate(SQLiteDatabase db) 
 		{
+     
 			BldPrsrLogger.i(TAG, SubTag + "Creating Users table");
 			try 
 			{
@@ -125,6 +130,7 @@ public class BldPrsrTrackerProvider extends ContentProvider
 							"name TEXT UNIQUE, " +
 							"status TEXT);");
 				}			
+				mBackupManager.dataChanged();
 			}
 			catch (Exception e)
 			{
@@ -177,6 +183,7 @@ public class BldPrsrTrackerProvider extends ContentProvider
 				sql = "DROP TABLE IF EXISTS " + BPDATA_TABLE_NAME + "_OLD;";
 				BldPrsrLogger.i(TAG, SubTag + "exec sql: " + sql);
 				db.execSQL(sql);
+				mBackupManager.dataChanged();
 			}
 			catch (Exception e)
 			{
@@ -195,9 +202,11 @@ public class BldPrsrTrackerProvider extends ContentProvider
 	@Override
 	public int delete(Uri uri, String where, String[] whereArgs) 
 	{
-	      SQLiteDatabase db = dbHelper.getWritableDatabase();
-	      BldPrsrLogger.i(TAG, SubTag + "Deleting SQL: " + where);
-	      int count;
+		int count = 0;
+		try
+		{
+			SQLiteDatabase db = dbHelper.getWritableDatabase();
+			BldPrsrLogger.i(TAG, SubTag + "Deleting SQL: " + where);
 			switch (sURIMatcher.match(uri)) 
 			{
 	      	case BPUSER:
@@ -211,9 +220,16 @@ public class BldPrsrTrackerProvider extends ContentProvider
 	      		break;
 	      	default:
 	      		throw new IllegalArgumentException("Unknown URI " + uri);
-	      }
-	      getContext().getContentResolver().notifyChange(uri, null);
-	      return count;
+			}
+			getContext().getContentResolver().notifyChange(uri, null);
+	      
+			mBackupManager.dataChanged();
+		}
+		catch (Exception e)
+		{
+			BldPrsrLogger.e(TAG, SubTag + e.getMessage());
+		}
+		return count;
 	}
 
 	/* (non-Javadoc)
@@ -241,26 +257,34 @@ public class BldPrsrTrackerProvider extends ContentProvider
 	@Override
 	public Uri insert(Uri uri, ContentValues values) 
 	{
-		BldPrsrLogger.i(TAG, SubTag + "Inserting a record");
-		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		switch (sURIMatcher.match(uri)) 
+		try
 		{
-			case BPUSER:
-            	db.insert(BPUSER_TABLE_NAME,null,values);
-            	db.close();
-				break;
-			case BPDATA:
-            	db.insert(BPDATA_TABLE_NAME,null,values);
-            	db.close();
-				break;
-			case BPSTATUS:
-				db.insert(BPSTATUS_TABLE_NAME ,null,values);
-            	db.close();
-				break;
-			default:
-				throw new IllegalArgumentException("Unknown URI " + uri);
+			BldPrsrLogger.i(TAG, SubTag + "Inserting a record");
+			SQLiteDatabase db = dbHelper.getWritableDatabase();
+			switch (sURIMatcher.match(uri)) 
+			{
+				case BPUSER:
+	            	db.insert(BPUSER_TABLE_NAME,null,values);
+	            	db.close();
+					break;
+				case BPDATA:
+	            	db.insert(BPDATA_TABLE_NAME,null,values);
+	            	db.close();
+					break;
+				case BPSTATUS:
+					db.insert(BPSTATUS_TABLE_NAME ,null,values);
+	            	db.close();
+					break;
+				default:
+					throw new IllegalArgumentException("Unknown URI " + uri);
+			}
+			BldPrsrLogger.i(TAG, SubTag + "Done inserting a record");
+			mBackupManager.dataChanged();
 		}
-		BldPrsrLogger.i(TAG, SubTag + "Done inserting a record");
+		catch (Exception e)
+		{
+			BldPrsrLogger.e(TAG, SubTag + e.getMessage());
+		}
 		return null;
 	}
 
@@ -390,6 +414,7 @@ public class BldPrsrTrackerProvider extends ContentProvider
 		      }
 		      getContext().getContentResolver().notifyChange(uri, null);
 		      BldPrsrLogger.i(TAG, SubTag + "Ended....");
+		      mBackupManager.dataChanged();
 		}
 		catch (Exception e)
 		{
