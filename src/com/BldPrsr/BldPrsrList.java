@@ -1,7 +1,6 @@
 package com.BldPrsr;
 import android.app.ListActivity;
 import android.content.ContentResolver;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
@@ -13,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -137,6 +135,7 @@ public class BldPrsrList extends ListActivity
 	/* (non-Javadoc)
 	 * @see android.app.ListActivity#onListItemClick(android.widget.ListView, android.view.View, int, long)
 	 */
+/*
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) 
 	{
@@ -157,7 +156,7 @@ public class BldPrsrList extends ListActivity
 
         startActivity(iDataEntry);
 	}
-	
+*/
 	@Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) 
     {
@@ -186,17 +185,6 @@ public class BldPrsrList extends ListActivity
 	    	tmpUri = Uri.withAppendedPath(tmpUri,"bpData");
 	    	cr.delete(tmpUri, query, null);
 	        return true;
-	    case R.id.updSelection:
-			// Save the entry in the preferences, so the display activity can display an appropriate record
-	        getSharedPreferences(PREFS_NAME,MODE_PRIVATE)
-	       		.edit()
-	       		.putString(PREF_ID, menuInfo.id + "")
-	       		.commit();
-
-	    	Intent iDataEntry = new Intent(this, BldPrsrHandleDetailEntry.class);
-
-	        startActivity(iDataEntry);
-	    	return true;
 	    }
 	    return super.onContextItemSelected(item);
 	}

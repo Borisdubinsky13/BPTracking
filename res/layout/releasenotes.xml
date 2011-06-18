@@ -13,6 +13,32 @@
 				android:layout_width="wrap_content" 
 				android:layout_height="wrap_content">
 		<TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:text="R-2.0 (DB Version: 2):" android:textSize="20sp" android:textStyle="bold"
+			/>
+		</TableRow>
+		<TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content">
+	 		<TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textSize="16sp"
+		        android:text="- Add ability to delete a record."
+		        />
+		</TableRow>
+		<TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content">
+	 		<TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textSize="16sp"
+		        android:text="- Add Google backup"
+			/>
+		</TableRow>
+		<TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView> </TextView>
+		</TableRow>
+		<TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content">
 		<TextView
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
