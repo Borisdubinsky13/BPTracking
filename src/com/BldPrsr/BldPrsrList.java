@@ -31,6 +31,8 @@ public class BldPrsrList extends ListActivity
 	
 	private static final String PREF_ID = "dataTBL_ID";
 	
+	private Cursor result;
+	
 	public SimpleCursorAdapter  items;
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -107,7 +109,7 @@ public class BldPrsrList extends ListActivity
 				"dPrsr",
 				"pulse"
 		};
-		Cursor result = getContentResolver().query(tmpUri, projection, query, null, null);
+		result = getContentResolver().query(tmpUri, projection, query, null, null);
 		startManagingCursor(result);
 		
 		String[] columns = new String[] { "_id", "sPrsr", "dPrsr", "pulse" };
@@ -184,6 +186,7 @@ public class BldPrsrList extends ListActivity
 	    	 
 	    	tmpUri = Uri.withAppendedPath(tmpUri,"bpData");
 	    	cr.delete(tmpUri, query, null);
+	    	result.requery();
 	        return true;
 	    }
 	    return super.onContextItemSelected(item);
