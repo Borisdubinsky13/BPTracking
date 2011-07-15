@@ -207,7 +207,17 @@ public class BldPrsrMain extends Activity
     						if ( value.equals("") )
     							dValue = 0;
     						else
-    							dValue = Integer.parseInt(value);
+    						{
+    							try
+    							{
+    								dValue = Integer.parseInt(value);
+    							}
+    							catch (Exception e)
+    							{
+    								BldPrsrLogger.e(TAG, SubTag + e.getMessage());
+    								dValue = 0;
+    							}
+    						}
     						diastolic.add(cnt, dValue);
     						if ( cnt == 0 )
     							min = max = dValue;
@@ -224,7 +234,18 @@ public class BldPrsrMain extends Activity
     						if ( value.equals("") )
     							dValue = 0;
     						else
-    							dValue = Integer.parseInt(value);
+    						{
+    							try
+    							{
+    								dValue = Integer.parseInt(value);
+    							}
+	  							catch (Exception e)
+								{
+									BldPrsrLogger.e(TAG, SubTag + e.getMessage());
+									dValue = 0;
+								}
+    						}
+    						
 							if ( dValue > max )
 								max = dValue;
 							if ( dValue < min )
@@ -236,7 +257,17 @@ public class BldPrsrMain extends Activity
     						if ( value.equals("") )
     							dValue = 0;
     						else
-    							dValue = Integer.parseInt(value);
+    						{
+    							try
+    							{
+    								dValue = Integer.parseInt(value);
+    							}
+	  							catch (Exception e)
+								{
+									BldPrsrLogger.e(TAG, SubTag + e.getMessage());
+									dValue = 0;
+								}
+    						}
 							if ( dValue > max )
 								max = dValue;
 							if ( dValue < min )
@@ -336,7 +367,17 @@ public class BldPrsrMain extends Activity
 					if ( value.equals("") )
 						iValue = 0;
 					else
-						iValue = Integer.parseInt(value);
+					{
+						try
+						{
+							iValue = Integer.parseInt(value);
+						}
+						catch (Exception e)
+						{
+							BldPrsrLogger.e(TAG, SubTag + e.getMessage());
+							iValue = 0;
+						}
+					}
 					diastolic.add(cnt, iValue);
 					if ( cnt == 0 )
 						min = max = iValue;
@@ -353,7 +394,17 @@ public class BldPrsrMain extends Activity
 					if ( value.equals("") )
 						iValue = 0;
 					else
-						iValue = Integer.parseInt(value);
+					{
+						try
+						{
+							iValue = Integer.parseInt(value);
+						}
+						catch (Exception e)
+						{
+							BldPrsrLogger.e(TAG, SubTag + e.getMessage());
+							iValue = 0;
+						}
+					}
 					if ( iValue > max )
 						max = iValue;
 					if ( iValue < min )
@@ -365,7 +416,18 @@ public class BldPrsrMain extends Activity
 					if ( value.equals("") )
 						iValue = 0;
 					else
-						iValue = Integer.parseInt(value);
+					{
+						try
+						{
+							iValue = Integer.parseInt(value);
+						}
+						catch (Exception e)
+						{
+							BldPrsrLogger.e(TAG, SubTag + e.getMessage());
+							iValue = 0;
+						}
+
+					}
 					if ( iValue > max )
 						max = iValue;
 					if ( iValue < min )

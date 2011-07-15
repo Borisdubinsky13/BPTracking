@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.BldPrsr"
-      android:versionName="2.0" android:versionCode="4">
+      android:versionCode="6" android:versionName="2.2">
     <application android:icon="@drawable/bloodpressure" android:label="@string/app_name" android:backupAgent="MyBackupAgent">
     	<meta-data android:name="com.google.android.backup.api_key"
     		android:value="AEdPqrEAAAAIJ88pyQvb_deS1rWLOor4qfbfI-Z-SzaJt_WbNw" />
@@ -59,11 +59,6 @@
 			<activity android:name="com.google.ads.AdActivity"
 			android:configChanges="orientation|keyboard|keyboardHidden" />
 			<!-- Track Market installs -->          
-			<receiver android:name="com.admob.android.ads.analytics.InstallReceiver" android:exported="true">
-			<intent-filter>
-				<action android:name="com.android.vending.INSTALL_REFERRER" />
-			</intent-filter>
-		</receiver>
 		<meta-data android:value="true" android:name="ADMOB_ALLOW_LOCATION_FOR_ADS" />    
     </application>
     
