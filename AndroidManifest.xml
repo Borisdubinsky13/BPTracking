@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.BldPrsr"
-      android:versionCode="6" android:versionName="2.2">
-    <application android:icon="@drawable/bloodpressure" android:label="@string/app_name" android:backupAgent="MyBackupAgent">
-    	<meta-data android:name="com.google.android.backup.api_key"
-    		android:value="AEdPqrEAAAAIJ88pyQvb_deS1rWLOor4qfbfI-Z-SzaJt_WbNw" />
+      android:versionCode="7" android:versionName="2.3">
+    <application android:icon="@drawable/bloodpressure" android:label="@string/app_name" > 
+<!--	android:backupAgent="MyBackupAgent"> -->
+<!--   	<meta-data android:name="com.google.android.backup.api_key" -->
+<!--    		android:value="AEdPqrEAAAAIJ88pyQvb_deS1rWLOor4qfbfI-Z-SzaJt_WbNw" /> -->
         <activity android:label="@string/appname" android:name="com.BldPrsr.BldPrstLoginHandler">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

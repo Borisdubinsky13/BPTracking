@@ -12,6 +12,25 @@
 	<TableLayout android:id="@+id/TableLayout01" 
 				android:layout_width="wrap_content" 
 				android:layout_height="wrap_content">
+		<TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:text="R-2.3 (DB Version: 3):" android:textSize="20sp" android:textStyle="bold"
+			/>
+		</TableRow>
+		<TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content">
+	 		<TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textSize="16sp"
+		        android:text="- Removing backup also means clean up the manifast. Manifast file is clean now!"
+		        />
+		</TableRow>
+		<TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView> </TextView>
+		</TableRow>
+				
 	<TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content">
 			<TextView
 				android:layout_width="fill_parent"
