@@ -54,11 +54,17 @@ public class BldPrsrHandleDetailEntry extends Activity
         final int mYear = c.get(Calendar.YEAR);
         final int mMonth = c.get(Calendar.MONTH) + 1;
         final int mDay = c.get(Calendar.DAY_OF_MONTH);
+        final int mHour = c.get(Calendar.HOUR_OF_DAY);
+        final int mMinutes = c.get(Calendar.MINUTE);
         
 		String evYearS = String.format("%04d",mYear);
 		String evMonthS = String.format("%02d", mMonth);
 		String evDayS = String.format("%02d",mDay);
+		String evHour = String.format("%02d", mHour);
+		String evMinutes = String.format("%02d", mMinutes);
+		
 		String dateStr = evYearS + "/" + evMonthS + "/" + evDayS;
+		String timeStr = evHour + ":" + evMinutes;
 		
         dateB = (Button)findViewById(R.id.dateButton);
     	dateB.setText( dateStr );

@@ -28,7 +28,7 @@ public class BldPrsrTrackerProvider extends ContentProvider
 	public static String SubTag="BldPrsrTrackerProvider: ";
 
 	private static final String DATABASE_NAME = "bldprsr.db";
-	private static final int DATABASE_VERSION = 3;
+	private static final int DATABASE_VERSION = 4;
 	
 	private static final String BPUSER_TABLE_NAME = "bpUsers";
 	private static final String BPDATA_TABLE_NAME = "bpData";
@@ -124,6 +124,7 @@ public class BldPrsrTrackerProvider extends ContentProvider
 					db.execSQL("CREATE TABLE " + BPDATA_TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
 							"name TEXT, " +
 							"mDate DATE, " +
+							"mTime DATE, " +
 							"sPrsr TEXT, " +
 							"dPrsr TEXT, " +
 							"pulse TEXT" +
@@ -165,6 +166,7 @@ public class BldPrsrTrackerProvider extends ContentProvider
 				sql = "CREATE TABLE " + BPDATA_TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
 						"name TEXT, " +
 						"mDate DATE, " +
+						"mTime DATE, " +
 						"sPrsr TEXT, " +
 						"dPrsr TEXT, " +
 						"pulse TEXT" +
@@ -189,6 +191,7 @@ public class BldPrsrTrackerProvider extends ContentProvider
 							vals.put("sPrsr", from.getString(from.getColumnIndex("dPrsr")));
 							vals.put("dPrsr", from.getString(from.getColumnIndex("sPrsr")));
 							vals.put("pulse", from.getString(from.getColumnIndex("pulse")));
+							vals.put("mTime", "00:00");
 						}
 						db.insert(BPDATA_TABLE_NAME,null,vals);
 					} while ( from.moveToNext() );
@@ -344,14 +347,14 @@ public class BldPrsrTrackerProvider extends ContentProvider
 				case BPDATA:
 					BldPrsrLogger.i(TAG, SubTag + "building query for DATA table");
 
-					sqlStm += "_id,name,mDate,dPrsr,sPrsr,pulse FROM ";
+					sqlStm += "_id,name,mDate,mTime,dPrsr,sPrsr,pulse FROM ";
 					sqlStm += BPDATA_TABLE_NAME;
 					if ( selection != null )
 					{
 						sqlStm += " WHERE ";
 						sqlStm += selection;
 					}
-					sqlStm += " order by mDate asc";
+					sqlStm += " order by mDate asc, mTime asc";
 					BldPrsrLogger.i(TAG, SubTag + "sql: " + sqlStm);
 					break;
 				case BPSTATUS:
@@ -450,6 +453,7 @@ public class BldPrsrTrackerProvider extends ContentProvider
 		BPDATA_PROJECTION_MAP = new HashMap<String,String>();
 		BPDATA_PROJECTION_MAP.put(BPDATA_TABLE_NAME, "name" );
 		BPDATA_PROJECTION_MAP.put(BPDATA_TABLE_NAME, "mDate" );
+		BPDATA_PROJECTION_MAP.put(BPDATA_TABLE_NAME, "mTime" );
 		BPDATA_PROJECTION_MAP.put(BPDATA_TABLE_NAME, "dPrsr");
 		BPDATA_PROJECTION_MAP.put(BPDATA_TABLE_NAME, "sPrsr");
 		BPDATA_PROJECTION_MAP.put(BPDATA_TABLE_NAME, "pulse");

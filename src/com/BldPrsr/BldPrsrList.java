@@ -62,14 +62,15 @@ public class BldPrsrList extends ListActivity
     		case 0:
     			tmpStr = cursor.getString(cursor.getColumnIndex("_id")) + ":";
     			break;
-    		case 3:
+    		case 4:
     			tmpStr = cursor.getString(cursor.getColumnIndex("dPrsr")) + ":";
     			break;
-    		case 4:
-    			tmpStr = cursor.getString(cursor.getColumnIndex("mDate")) + " : ";
+    		case 5:
+    			tmpStr = cursor.getString(cursor.getColumnIndex("mDate")) + " " + 
+    						cursor.getString(cursor.getColumnIndex("mTime")) + " : ";
     			tmpStr += cursor.getString(cursor.getColumnIndex("sPrsr")) + ":";
     			break;
-    		case 5:
+    		case 6:
     			tmpStr = cursor.getString(cursor.getColumnIndex("pulse"));
     			break;
     		default:
