@@ -144,6 +144,12 @@ public class BldPrsrMain extends Activity
 		String evDayS = String.format("%02d",mDay);
 		String dateStr = evYearS + "/" + evMonthS + "/" + evDayS;
 		
+        final int mHour = c.get(Calendar.HOUR_OF_DAY);
+        final int mMinutes = c.get(Calendar.MINUTE);
+		String evHour = String.format("%02d", mHour);
+		String evMinutes = String.format("%02d", mMinutes);
+		final String timeStr = evHour + ":" + evMinutes;
+		
         dateB = (Button)findViewById(R.id.dateButton);
     	dateB.setText( dateStr );
     	dateB.setOnClickListener(new View.OnClickListener()
@@ -170,6 +176,7 @@ public class BldPrsrMain extends Activity
         	    
             	vals.put("name", username);
             	vals.put("mDate", dateB.getText().toString());
+            	vals.put("mTime",  timeStr);
             	vals.put("dPrsr", dPr.getText().toString());
             	vals.put("sPrsr", sPr.getText().toString());
             	vals.put("pulse", pulse.getText().toString());
@@ -340,7 +347,11 @@ public class BldPrsrMain extends Activity
 		XYSeries diastolic = new XYValueSeries("Diastolic");
 		XYSeries systolic = new XYValueSeries("Systolic");
 		XYSeries sPulse = new XYValueSeries("Pulse");
-
+		
+		XYSeries diasDef = new XYValueSeries("Base Diastolic (80)");
+		XYSeries systDef = new XYValueSeries("Base Systolic (120)");
+		XYSeries pulsDef = new XYValueSeries("Base Pulse (65)");
+		
 		String	query = null;
 		int  cnt = 0;
 		int	min=0,max=0;
@@ -379,6 +390,7 @@ public class BldPrsrMain extends Activity
 						}
 					}
 					diastolic.add(cnt, iValue);
+					diasDef.add(cnt, 80);
 					if ( cnt == 0 )
 						min = max = iValue;
 					else
@@ -410,6 +422,7 @@ public class BldPrsrMain extends Activity
 					if ( iValue < min )
 						min = iValue;
 					systolic.add(cnt, iValue);
+					systDef.add(cnt, 120);
 					
 					value = result.getString(result.getColumnIndex("pulse"));
 					BldPrsrLogger.i(TAG, SubTag + "pulse: " + value);
@@ -433,6 +446,7 @@ public class BldPrsrMain extends Activity
 					if ( iValue < min )
 						min = iValue;
 					sPulse.add(cnt, iValue);
+					pulsDef.add(cnt,65);
 					
 					cnt ++;
 
@@ -444,8 +458,12 @@ public class BldPrsrMain extends Activity
 		mDataset.addSeries(systolic);
 		mDataset.addSeries(sPulse);
 		
-	    int[] colors = new int[] { Color.CYAN, Color.RED, Color.YELLOW };
-	    PointStyle[] styles = new PointStyle[] { PointStyle.SQUARE, PointStyle.DIAMOND, PointStyle.CIRCLE};
+		mDataset.addSeries(diasDef);
+		mDataset.addSeries(systDef);
+		mDataset.addSeries(pulsDef);
+		
+	    int[] colors = new int[] { Color.CYAN, Color.RED, Color.YELLOW, Color.CYAN, Color.RED, Color.YELLOW, };
+	    PointStyle[] styles = new PointStyle[] { PointStyle.SQUARE, PointStyle.DIAMOND, PointStyle.CIRCLE };
 
 	    XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
 	    mRenderer.setAxisTitleTextSize(16);
@@ -455,8 +473,8 @@ public class BldPrsrMain extends Activity
 	    mRenderer.setPointSize(5f);
 	    mRenderer.setXLabels(0);
 	    mRenderer.setShowGrid(true);
-	    mRenderer.setDisplayChartValues(true);
-	    mRenderer.setChartTitle("");
+	    mRenderer.setDisplayChartValues(false);
+	    mRenderer.setChartTitle("Blood Pressure/Pulse");
 	    mRenderer.setXTitle("Date");
 	    mRenderer.setYTitle("");
 	    mRenderer.setXAxisMin(0);
@@ -468,15 +486,26 @@ public class BldPrsrMain extends Activity
 	    
 	    // mRenderer.setMargins(new int[] { 20, 30, 15, 0 });
 	    int length = colors.length;
-	    for ( int k = 0; k < length; k++) 
+	    int	k;
+	    for ( k = 0; k < 3; k++) 
 	    {
 	    	XYSeriesRenderer r = new XYSeriesRenderer();
 	    	r.setColor(colors[k]);
-	    	r.setPointStyle(styles[k]);
+    		r.setPointStyle(styles[k]);
+    		r.setLineWidth(5);
 	    	mRenderer.addSeriesRenderer(r);
 	    }
+	    
+	    for ( ; k < length; k++) 
+	    {
+	    	XYSeriesRenderer r = new XYSeriesRenderer();
+	    	r.setColor(colors[k]);
+	    	r.setLineWidth(1);
+	    	mRenderer.addSeriesRenderer(r);
+	    }
+	    	    
 	    length = mRenderer.getSeriesRendererCount();
-	    for (int k = 0; k < length; k++) 
+	    for (k = 0; k < length; k++) 
 	    {
 	      ((XYSeriesRenderer) mRenderer.getSeriesRendererAt(k)).setFillPoints(true);
 	    }
