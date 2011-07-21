@@ -190,6 +190,10 @@ public class BldPrsrMain extends Activity
     			XYSeries diastolic = new XYValueSeries("Diastolic");
     			XYSeries systolic = new XYValueSeries("Systolic");
     			XYSeries sPulse = new XYValueSeries("Pulse");
+    			
+    			XYSeries diasDef = new XYValueSeries("Base Diastolic (80)");
+    			XYSeries systDef = new XYValueSeries("Base Systolic (120)");
+    			XYSeries pulsDef = new XYValueSeries("Base Pulse (65)");
 
     			String	query = null;
 				int  cnt = 0;
@@ -226,6 +230,7 @@ public class BldPrsrMain extends Activity
     							}
     						}
     						diastolic.add(cnt, dValue);
+    						diasDef.add(cnt, 80);
     						if ( cnt == 0 )
     							min = max = dValue;
     						else
@@ -258,6 +263,7 @@ public class BldPrsrMain extends Activity
 							if ( dValue < min )
 								min = dValue;
     						systolic.add(cnt, dValue);
+    						systDef.add(cnt, 120);
     						
     						value = result.getString(result.getColumnIndex("pulse"));
     						BldPrsrLogger.i(TAG, SubTag + "pulse: " + value);
@@ -280,6 +286,7 @@ public class BldPrsrMain extends Activity
 							if ( dValue < min )
 								min = dValue;
     						sPulse.add(cnt, dValue);
+    						pulsDef.add(cnt, 65);
     						
     						cnt ++;
  
@@ -291,7 +298,7 @@ public class BldPrsrMain extends Activity
     			mDataset.addSeries(systolic);
     			mDataset.addSeries(sPulse);
     			
-    		    int[] colors = new int[] { Color.CYAN, Color.RED, Color.YELLOW };
+    		    int[] colors = new int[] { Color.CYAN, Color.RED, Color.YELLOW, Color.CYAN, Color.RED, Color.YELLOW, };
     		    PointStyle[] styles = new PointStyle[] { PointStyle.SQUARE, PointStyle.DIAMOND, PointStyle.CIRCLE};
 
     		    XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
@@ -315,15 +322,26 @@ public class BldPrsrMain extends Activity
     		    
     		    // mRenderer.setMargins(new int[] { 20, 30, 15, 0 });
     		    int length = colors.length;
-    		    for ( int k = 0; k < length; k++) 
+
+    		    int	k;
+    		    for ( k = 0; k < 3; k++) 
     		    {
     		    	XYSeriesRenderer r = new XYSeriesRenderer();
     		    	r.setColor(colors[k]);
-    		    	r.setPointStyle(styles[k]);
+    	    		r.setPointStyle(styles[k]);
+    	    		r.setLineWidth(5);
+    		    	mRenderer.addSeriesRenderer(r);
+    		    }
+    		    
+    		    for ( ; k < length; k++) 
+    		    {
+    		    	XYSeriesRenderer r = new XYSeriesRenderer();
+    		    	r.setColor(colors[k]);
+    		    	r.setLineWidth(1);
     		    	mRenderer.addSeriesRenderer(r);
     		    }
     		    length = mRenderer.getSeriesRendererCount();
-    		    for (int k = 0; k < length; k++) 
+    		    for (k = 0; k < length; k++) 
     		    {
     		      ((XYSeriesRenderer) mRenderer.getSeriesRendererAt(k)).setFillPoints(true);
     		    }
@@ -462,7 +480,7 @@ public class BldPrsrMain extends Activity
 		mDataset.addSeries(systDef);
 		mDataset.addSeries(pulsDef);
 		
-	    int[] colors = new int[] { Color.CYAN, Color.RED, Color.YELLOW, Color.CYAN, Color.RED, Color.YELLOW, };
+	    int[] colors = new int[] { Color.CYAN, Color.RED, Color.YELLOW, Color.CYAN, Color.RED, Color.YELLOW };
 	    PointStyle[] styles = new PointStyle[] { PointStyle.SQUARE, PointStyle.DIAMOND, PointStyle.CIRCLE };
 
 	    XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
