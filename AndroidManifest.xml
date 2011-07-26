@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.BldPrsr"
-      android:versionName="3.0" android:versionCode="9">
+      android:versionCode="10" android:versionName="4.0">
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
     <application android:icon="@drawable/bloodpressure" android:label="@string/app_name" > 
 <!--	android:backupAgent="MyBackupAgent"> -->
 <!--   	<meta-data android:name="com.google.android.backup.api_key" -->
 <!--    		android:value="AEdPqrEAAAAIJ88pyQvb_deS1rWLOor4qfbfI-Z-SzaJt_WbNw" /> -->
-        <activity android:label="@string/appname" android:name="com.BldPrsr.BldPrstLoginHandler">
+        <activity android:label="@string/appname" android:name="com.BldPrsr.BldPrsrMain">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -64,6 +65,7 @@
     </application>
     
     <!-- AdMob SDK requires Internet permission -->
+	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 	<uses-sdk android:minSdkVersion="8">

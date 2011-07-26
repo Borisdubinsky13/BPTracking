@@ -1,5 +1,8 @@
 package com.BldPrsr;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Calendar;
 
 import org.achartengine.ChartFactory;
@@ -12,6 +15,9 @@ import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
+
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ContentResolver;
@@ -22,6 +28,8 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,6 +39,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 public class BldPrsrMain extends Activity 
 {
@@ -70,15 +79,17 @@ public class BldPrsrMain extends Activity
 	{
 		Intent iAbout = new Intent(this, AboutHandler.class);
 		Intent iList = new Intent(this, BldPrsrList.class);
-		Intent iAddUser = new Intent(this, BldPrsrSetupWin.class);
+		// Intent iAddUser = new Intent(this, BldPrsrSetupWin.class);
 
 		// Handle item selection
 	    switch (item.getItemId()) 
 	    {
+/*
 	    case R.id.AddUser:
 	    	BldPrsrLogger.i(TAG, SubTag + "User " + "trying to start AddUser");
 	        startActivity(iAddUser);
-	        return true;	
+	        return true;
+*/
 	    case R.id.List:
 	    	BldPrsrLogger.i(TAG, SubTag + "User " + "trying to start List");
 	        startActivity(iList);
@@ -87,6 +98,7 @@ public class BldPrsrMain extends Activity
 	    	BldPrsrLogger.i(TAG, SubTag + "User " + "trying to start ABOUT");
 	        startActivity(iAbout);
 	        return true;
+/*
 	    case R.id.Logout:
 	    	BldPrsrLogger.i(TAG, SubTag + "User " + "trying to Logout");
    			Uri	tmpUri = Uri.parse("content://com.BldPrsr.provider.userContentProvider");
@@ -105,6 +117,67 @@ public class BldPrsrMain extends Activity
             BldPrsrLogger.i(TAG, SubTag + "trying to logout");
 	        finish();
 	        return true;
+*/	     
+	    case R.id.Export:
+	    	try
+	    	{
+	    		String	fname = "/mnt/sdcard/bldprsr.csv";
+	    		BldPrsrLogger.i(TAG, SubTag + "User " + "Trying to export data to CSV. File: " + fname);
+		    	File myFile = new File( fname );
+				myFile.createNewFile();
+				FileOutputStream fOut =  new FileOutputStream(myFile);
+				BufferedOutputStream bos = new BufferedOutputStream( fOut );
+				
+	   			Uri	tmpUri = Uri.parse("content://com.BldPrsr.provider.userContentProvider");
+				tmpUri = Uri.withAppendedPath(tmpUri,"bpData");
+				
+				String query = "name = '" + username + "'";
+				BldPrsrLogger.i(TAG, SubTag + "Query: " + query);
+				Cursor result = managedQuery(tmpUri, projection, query, null, null);
+    			BldPrsrLogger.i(TAG, SubTag + "there are " + result.getCount() + " records" );
+    			if ( result.getCount() > 0 )
+    			{
+    				if ( result.moveToFirst() )
+    				{
+    					String	strOut = "Date,Time,Name,Systolic,Diastolic,Pulse\n";	
+    					bos.write(strOut.getBytes());
+
+    					do
+    					{
+    						String	nameStr = result.getString(result.getColumnIndex("name"));
+    						String	mDateStr = result.getString(result.getColumnIndex("mDate"));
+    						String	mTimeStr = result.getString(result.getColumnIndex("mTime"));
+    						String	sPrsrStr = result.getString(result.getColumnIndex("sPrsr"));
+    						String	dPrsrStr = result.getString(result.getColumnIndex("dPrsr"));
+    						String	pulse = result.getString(result.getColumnIndex("pulse"));
+    						
+    						strOut = mDateStr + "," + mTimeStr + "," + nameStr  + "," + sPrsrStr + "," + dPrsrStr + "," + pulse + "\n";	
+    						bos.write(strOut.getBytes());
+    					} while (result.moveToNext());
+    				}
+    				result.close();
+    				bos.close();
+
+    				int duration = Toast.LENGTH_LONG;
+        			String text = "Data has been exported into " + fname;
+        			Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+        			toast.show();
+    			}
+    			else
+    			{
+    				int duration = Toast.LENGTH_SHORT;
+        			String text = "No data to export";
+        			Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+        			toast.show();
+    			}
+            
+	    	}
+	    	catch (Exception e)
+	    	{
+	    		BldPrsrLogger.e(TAG, SubTag + e.getMessage());
+	    	}
+	    	
+	    	return true;
 	    default:
 	        return super.onOptionsItemSelected(item);
 	    }
@@ -116,6 +189,64 @@ public class BldPrsrMain extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bldprsmain);
+        
+    	String androidId = Settings.Secure.getString 
+		(this.getContentResolver(), 
+	 	android.provider.Settings.Secure.ANDROID_ID);
+    	if ( androidId == null || androidId.equals("9774d56d682e549c"))
+		{
+			// We are running on the emulator. Debugging should be ON.
+			BldPrsrLogger.e(TAG, SubTag + "Enabeling VERBOSE debugging. androidID = " + androidId);
+			BldPrsrLogger.enableLogging(Log.VERBOSE);
+		}
+		else
+		{
+			// We are running on a phone. Debugging should be OFF.
+			BldPrsrLogger.e(TAG, SubTag + "Enabeling ERRORS only debugging. androidID = " + androidId);
+			BldPrsrLogger.enableLogging(Log.ERROR);
+		}
+		 
+		BldPrsrLogger.i(TAG, SubTag + " Enter onCreate() ");
+	
+		// First check if there are any users. If not, then switch to setup window to add first user.
+		try
+		{
+	        Account[] accounts = AccountManager.get(this).getAccountsByType("com.google");
+	        BldPrsrLogger.i(TAG, SubTag + "Got account list. Number of entries: " + accounts.length);
+	        if ( accounts.length <= 0 )
+	        {
+	        	int duration = Toast.LENGTH_SHORT;
+				String text = "Primary account is not setup. Please setup google account first.";
+				Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+				toast.show();
+	        }
+	        else
+	        {
+		        String username = accounts[0].name; 
+		        BldPrsrLogger.i(TAG, SubTag + "My email id that i want: " + username); 
+		 
+		        getSharedPreferences(PREFS_NAME,MODE_PRIVATE)
+		    	.edit()
+		    	.putString(PREF_USERNAME, username)
+		    	.commit();
+		        
+		        // update database to make sure that all entries have username = primary google account.
+		        // See if there are any data that has name other then current username
+		        
+	   			Uri	tmpUri = Uri.parse("content://com.BldPrsr.provider.userContentProvider");
+    			tmpUri = Uri.withAppendedPath(tmpUri,"bpData");
+    			
+    			// Update the table with the new id
+            	ContentValues vals = new ContentValues();
+            	ContentResolver cr = getContentResolver();
+            	vals.put("name", username);
+            	cr.update(tmpUri, vals, "name != '" + username + "'", null);
+	        }
+		}
+		catch (Exception e)
+		{
+			BldPrsrLogger.e(TAG, SubTag + e.getMessage());
+		}
     }
     
 	@Override
@@ -123,7 +254,7 @@ public class BldPrsrMain extends Activity
 	{
 		super.onResume();
         setContentView(R.layout.bldprsmain);
-		
+        
 		AdView	adView = (AdView)findViewById(R.id.adDataAnalysis);
 	    adView.loadAd(new AdRequest());
 	    
@@ -131,7 +262,7 @@ public class BldPrsrMain extends Activity
 	    
     	SharedPreferences pref = getSharedPreferences(PREFS_NAME,MODE_PRIVATE);   
     	username = pref.getString(PREF_USERNAME, null);
-    	
+
     	this.setTitle("User: " + username);
 
 	    /* Get current date */
@@ -297,9 +428,14 @@ public class BldPrsrMain extends Activity
     			mDataset.addSeries(diastolic);
     			mDataset.addSeries(systolic);
     			mDataset.addSeries(sPulse);
+
+    			mDataset.addSeries(diasDef);
+    			mDataset.addSeries(systDef);
+    			mDataset.addSeries(pulsDef);
     			
-    		    int[] colors = new int[] { Color.CYAN, Color.RED, Color.YELLOW, Color.CYAN, Color.RED, Color.YELLOW, };
-    		    PointStyle[] styles = new PointStyle[] { PointStyle.SQUARE, PointStyle.DIAMOND, PointStyle.CIRCLE};
+    			
+    		    int[] colors = new int[] { Color.CYAN, Color.RED, Color.YELLOW, Color.CYAN, Color.RED, Color.YELLOW };
+    		    PointStyle[] styles = new PointStyle[] { PointStyle.SQUARE, PointStyle.DIAMOND, PointStyle.CIRCLE };
 
     		    XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
     		    mRenderer.setAxisTitleTextSize(16);
@@ -309,7 +445,7 @@ public class BldPrsrMain extends Activity
     		    mRenderer.setPointSize(5f);
     		    mRenderer.setXLabels(0);
     		    mRenderer.setShowGrid(true);
-    		    mRenderer.setDisplayChartValues(true);
+    		    mRenderer.setDisplayChartValues(false);
     		    mRenderer.setChartTitle("");
     		    mRenderer.setXTitle("Date");
     		    mRenderer.setYTitle("");
@@ -345,7 +481,7 @@ public class BldPrsrMain extends Activity
     		    {
     		      ((XYSeriesRenderer) mRenderer.getSeriesRendererAt(k)).setFillPoints(true);
     		    }
-    		    BldPrsrLogger.i(TAG, SubTag + "mRenderer and mDataset are set");
+    		    BldPrsrLogger.i(TAG, SubTag + "(Add) mRenderer and mDataset are set");
     		    GraphicalView mChartView;
 				try 
 				{

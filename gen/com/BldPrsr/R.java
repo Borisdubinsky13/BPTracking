@@ -14,13 +14,12 @@ public final class R {
         public static final int bloodpressure=0x7f020000;
     }
     public static final class id {
-        public static final int About=0x7f06002f;
-        public static final int AddUser=0x7f06002d;
+        public static final int About=0x7f06002e;
         public static final int Addprsr=0x7f06000e;
         public static final int AppVersion=0x7f060004;
         public static final int DPressure=0x7f06000b;
+        public static final int Export=0x7f06002d;
         public static final int List=0x7f06002c;
-        public static final int Logout=0x7f06002e;
         public static final int SPressure=0x7f06000a;
         public static final int ScrollView01=0x7f060001;
         public static final int TableLayout01=0x7f060002;
@@ -28,7 +27,7 @@ public final class R {
         public static final int TextView01=0x7f060021;
         public static final int TextView02=0x7f060020;
         public static final int aChart=0x7f06000f;
-        public static final int aboutMenu=0x7f060031;
+        public static final int aboutMenu=0x7f060030;
         public static final int about_display=0x7f060000;
         public static final int adDataAnalysis=0x7f060008;
         public static final int adListRes=0x7f060013;
@@ -60,7 +59,7 @@ public final class R {
         public static final int releasenotes=0x7f06001e;
         public static final int sID=0x7f060019;
         public static final int sValue=0x7f060016;
-        public static final int setup=0x7f060030;
+        public static final int setup=0x7f06002f;
         public static final int setupscr=0x7f06001f;
         public static final int topTable=0x7f060009;
         public static final int updEntry=0x7f060010;
@@ -83,6 +82,7 @@ public final class R {
     public static final class string {
         public static final int AddResName=0x7f04000a;
         public static final int Cancel=0x7f040018;
+        public static final int Export=0x7f040020;
         public static final int Name=0x7f040001;
         public static final int aboutName=0x7f040005;
         public static final int add=0x7f040017;

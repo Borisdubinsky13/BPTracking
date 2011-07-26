@@ -29,7 +29,7 @@ public class BldPrsrList extends ListActivity
 	public static final String PREFS_NAME = "BldPrsrFile";
 	private static final String PREF_USERNAME = "username";	
 	
-	private static final String PREF_ID = "dataTBL_ID";
+	// private static final String PREF_ID = "dataTBL_ID";
 	
 	private Cursor result;
 	
@@ -97,7 +97,7 @@ public class BldPrsrList extends ListActivity
 	    adView.loadAd(new AdRequest());
 
 	    BldPrsrLogger.i(TAG, SubTag + "ListRes()"); 
-    	SharedPreferences pref = getSharedPreferences(PREFS_NAME,MODE_PRIVATE);   
+    	SharedPreferences pref = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);   
     	String username = pref.getString(PREF_USERNAME, null);
 		this.setTitle("User: " + username);
 		String query = "name = '" + username + "'";

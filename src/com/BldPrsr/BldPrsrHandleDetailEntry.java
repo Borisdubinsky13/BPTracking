@@ -16,10 +16,10 @@ public class BldPrsrHandleDetailEntry extends Activity
 	public static String SubTag="BldPrsrHandleDetailEntry: ";
 	
 	public static final String PREFS_NAME = "BldPrsr";
-	private static final String PREF_ID = "dataTBL_ID";
+	// private static final String PREF_ID = "dataTBL_ID";
 	private static final String PREF_USERNAME = "username";
 	
-	private String idIndex="";
+	// private String idIndex="";
 	
 	Button dateB;
 	Button updB;
@@ -48,23 +48,23 @@ public class BldPrsrHandleDetailEntry extends Activity
 		SharedPreferences pref = getSharedPreferences(PREFS_NAME,MODE_PRIVATE);   
 		String username = pref.getString(PREF_USERNAME, null);
 		this.setTitle("User: " + username);
-		idIndex = pref.getString(PREF_ID, null);
+		// idIndex = pref.getString(PREF_ID, null);
 		
 		final Calendar c = Calendar.getInstance();
         final int mYear = c.get(Calendar.YEAR);
         final int mMonth = c.get(Calendar.MONTH) + 1;
         final int mDay = c.get(Calendar.DAY_OF_MONTH);
-        final int mHour = c.get(Calendar.HOUR_OF_DAY);
-        final int mMinutes = c.get(Calendar.MINUTE);
+        // final int mHour = c.get(Calendar.HOUR_OF_DAY);
+        //final int mMinutes = c.get(Calendar.MINUTE);
         
 		String evYearS = String.format("%04d",mYear);
 		String evMonthS = String.format("%02d", mMonth);
 		String evDayS = String.format("%02d",mDay);
-		String evHour = String.format("%02d", mHour);
-		String evMinutes = String.format("%02d", mMinutes);
+		// String evHour = String.format("%02d", mHour);
+		// String evMinutes = String.format("%02d", mMinutes);
 		
 		String dateStr = evYearS + "/" + evMonthS + "/" + evDayS;
-		String timeStr = evHour + ":" + evMinutes;
+		// String timeStr = evHour + ":" + evMinutes;
 		
         dateB = (Button)findViewById(R.id.dateButton);
     	dateB.setText( dateStr );
