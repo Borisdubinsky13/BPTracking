@@ -326,6 +326,11 @@ public class BldPrsrMain extends Activity
     			XYSeries systDef = new XYValueSeries("Base Systolic (120)");
     			XYSeries pulsDef = new XYValueSeries("Base Pulse (65)");
 
+    			/* Create the series for the trend line */
+    			BldPrsrTrendline diasTrend = new BldPrsrTrendline("Dias. Trend");
+    			BldPrsrTrendline systTrend = new BldPrsrTrendline("Syst. Trend");
+    			BldPrsrTrendline pulseTrend = new BldPrsrTrendline("Pulse Trend");
+     			
     			String	query = null;
 				int  cnt = 0;
 				int	min=0,max=0;
@@ -362,6 +367,7 @@ public class BldPrsrMain extends Activity
     						}
     						diastolic.add(cnt, dValue);
     						diasDef.add(cnt, 80);
+    						diasTrend.addXY(cnt, dValue);
     						if ( cnt == 0 )
     							min = max = dValue;
     						else
@@ -395,6 +401,7 @@ public class BldPrsrMain extends Activity
 								min = dValue;
     						systolic.add(cnt, dValue);
     						systDef.add(cnt, 120);
+    						systTrend.addXY(cnt, dValue);
     						
     						value = result.getString(result.getColumnIndex("pulse"));
     						BldPrsrLogger.i(TAG, SubTag + "pulse: " + value);
@@ -417,8 +424,7 @@ public class BldPrsrMain extends Activity
 							if ( dValue < min )
 								min = dValue;
     						sPulse.add(cnt, dValue);
-    						pulsDef.add(cnt, 65);
-    						
+    						pulseTrend.addXY(cnt, dValue);
     						cnt ++;
  
     					} while (result.moveToNext());
@@ -428,13 +434,12 @@ public class BldPrsrMain extends Activity
     			mDataset.addSeries(diastolic);
     			mDataset.addSeries(systolic);
     			mDataset.addSeries(sPulse);
-
-    			mDataset.addSeries(diasDef);
-    			mDataset.addSeries(systDef);
-    			mDataset.addSeries(pulsDef);
     			
-    			
-    		    int[] colors = new int[] { Color.CYAN, Color.RED, Color.YELLOW, Color.CYAN, Color.RED, Color.YELLOW };
+    			mDataset.addSeries(diasTrend.getTheTrend());
+    			mDataset.addSeries(systTrend.getTheTrend());
+    			mDataset.addSeries(pulseTrend.getTheTrend());
+   			
+    			int[] colors = new int[] { Color.CYAN, Color.RED, Color.YELLOW, Color.CYAN, Color.RED, Color.YELLOW };
     		    PointStyle[] styles = new PointStyle[] { PointStyle.SQUARE, PointStyle.DIAMOND, PointStyle.CIRCLE };
 
     		    XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
@@ -501,10 +506,10 @@ public class BldPrsrMain extends Activity
 		XYSeries diastolic = new XYValueSeries("Diastolic");
 		XYSeries systolic = new XYValueSeries("Systolic");
 		XYSeries sPulse = new XYValueSeries("Pulse");
-		
-		XYSeries diasDef = new XYValueSeries("Base Diastolic (80)");
-		XYSeries systDef = new XYValueSeries("Base Systolic (120)");
-		XYSeries pulsDef = new XYValueSeries("Base Pulse (65)");
+
+		BldPrsrTrendline diasTrend = new BldPrsrTrendline("Dias. Trend");
+		BldPrsrTrendline systTrend = new BldPrsrTrendline("Syst. Trend");
+		BldPrsrTrendline pulseTrend = new BldPrsrTrendline("Pulse Trend");
 		
 		String	query = null;
 		int  cnt = 0;
@@ -544,7 +549,7 @@ public class BldPrsrMain extends Activity
 						}
 					}
 					diastolic.add(cnt, iValue);
-					diasDef.add(cnt, 80);
+					diasTrend.addXY(cnt,iValue);
 					if ( cnt == 0 )
 						min = max = iValue;
 					else
@@ -576,7 +581,7 @@ public class BldPrsrMain extends Activity
 					if ( iValue < min )
 						min = iValue;
 					systolic.add(cnt, iValue);
-					systDef.add(cnt, 120);
+					systTrend.addXY(cnt,iValue);
 					
 					value = result.getString(result.getColumnIndex("pulse"));
 					BldPrsrLogger.i(TAG, SubTag + "pulse: " + value);
@@ -600,8 +605,7 @@ public class BldPrsrMain extends Activity
 					if ( iValue < min )
 						min = iValue;
 					sPulse.add(cnt, iValue);
-					pulsDef.add(cnt,65);
-					
+					pulseTrend.addXY(cnt,iValue);
 					cnt ++;
 
 				} while (result.moveToNext());
@@ -611,10 +615,10 @@ public class BldPrsrMain extends Activity
 		mDataset.addSeries(diastolic);
 		mDataset.addSeries(systolic);
 		mDataset.addSeries(sPulse);
-		
-		mDataset.addSeries(diasDef);
-		mDataset.addSeries(systDef);
-		mDataset.addSeries(pulsDef);
+
+		mDataset.addSeries(diasTrend.getTheTrend());
+		mDataset.addSeries(systTrend.getTheTrend());
+		mDataset.addSeries(pulseTrend.getTheTrend());
 		
 	    int[] colors = new int[] { Color.CYAN, Color.RED, Color.YELLOW, Color.CYAN, Color.RED, Color.YELLOW };
 	    PointStyle[] styles = new PointStyle[] { PointStyle.SQUARE, PointStyle.DIAMOND, PointStyle.CIRCLE };
