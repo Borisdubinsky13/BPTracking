@@ -13,6 +13,7 @@ import org.achartengine.model.XYSeries;
 import org.achartengine.model.XYValueSeries;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
+
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 
@@ -28,6 +29,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
@@ -118,10 +120,16 @@ public class BldPrsrMain extends Activity
 	        finish();
 	        return true;
 */	     
+	    case R.id.importDB:
+	    	BldPrsrLogger.i(TAG, SubTag + "trying to import data");
+	    	Intent importAct = new Intent(this, ImportActivity.class);
+	    	startActivity(importAct);
+	    	return true;
 	    case R.id.Export:
 	    	try
 	    	{
-	    		String	fname = "/mnt/sdcard/bldprsr.csv";
+	    		String fnoSDName = "/bldprsr.csv";
+	    		String	fname = Environment.getExternalStorageDirectory()+fnoSDName;
 	    		BldPrsrLogger.i(TAG, SubTag + "User " + "Trying to export data to CSV. File: " + fname);
 		    	File myFile = new File( fname );
 				myFile.createNewFile();
@@ -139,7 +147,7 @@ public class BldPrsrMain extends Activity
     			{
     				if ( result.moveToFirst() )
     				{
-    					String	strOut = "Date,Time,Name,Systolic,Diastolic,Pulse\n";	
+    					String	strOut = "Date,Time,Systolic,Diastolic,Pulse,Name\n";	
     					bos.write(strOut.getBytes());
 
     					do
@@ -147,11 +155,11 @@ public class BldPrsrMain extends Activity
     						String	nameStr = result.getString(result.getColumnIndex("name"));
     						String	mDateStr = result.getString(result.getColumnIndex("mDate"));
     						String	mTimeStr = result.getString(result.getColumnIndex("mTime"));
-    						String	sPrsrStr = result.getString(result.getColumnIndex("sPrsr"));
-    						String	dPrsrStr = result.getString(result.getColumnIndex("dPrsr"));
-    						String	pulse = result.getString(result.getColumnIndex("pulse"));
+    						String	sPrsrStr = String.format("%03d",Integer.parseInt(result.getString(result.getColumnIndex("sPrsr"))));
+    						String	dPrsrStr = String.format("%03d",Integer.parseInt(result.getString(result.getColumnIndex("dPrsr"))));
+    						String	pulse = String.format("%03d",Integer.parseInt(result.getString(result.getColumnIndex("pulse"))));
     						
-    						strOut = mDateStr + "," + mTimeStr + "," + nameStr  + "," + sPrsrStr + "," + dPrsrStr + "," + pulse + "\n";	
+    						strOut = mDateStr + "," + mTimeStr + "," + sPrsrStr + "," + dPrsrStr + "," + pulse + "," + nameStr  + "\n";	
     						bos.write(strOut.getBytes());
     					} while (result.moveToNext());
     				}
@@ -181,6 +189,7 @@ public class BldPrsrMain extends Activity
 	    default:
 	        return super.onOptionsItemSelected(item);
 	    }
+
 	}
 
 	/** Called when the activity is first created. */

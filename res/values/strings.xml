@@ -34,4 +34,5 @@
 	<string name="delStr">Delete</string>
 	<string name="updSelection">Update</string>
 	<string name="Export">exprt2CSV</string>
+	<string name="importDB">Import DB</string>
 </resources>

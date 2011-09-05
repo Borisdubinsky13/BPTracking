@@ -16,7 +16,7 @@ import android.widget.TextView;
  */
 public class AboutHandler extends Activity
 {
-	public String TAG="gamePnLTracker";
+	public String TAG="BldPrsr";
 	public String SubTag="AboutHandler: ";
 	
 	/* (non-Javadoc)
