@@ -10,11 +10,55 @@
 		android:layout_height="wrap_content"
 		ads:adUnitId="a14df398d995026" 
 		ads:adSize="BANNER" />
-	<TextView android:id="@+id/heading"
-       	android:layout_width="fill_parent"
-       	android:layout_height="wrap_content"
-       	android:text="Date/Time : Systolic:Diastolic:Pulse" android:textSize="15dp" android:textStyle="bold" android:typeface="monospace"/>
-	<ListView android:id="@android:id/list"
-		android:layout_width="fill_parent" 
-		android:layout_height="wrap_content" />
+	    <TableRow
+	        android:id="@+id/tblRowH"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal"
+	        android:textAlignment="center" >
+
+	        <TextView
+	            android:id="@+id/dtField"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/Date"
+	            android:paddingRight="65sp"
+	            android:textAppearance="?android:attr/textAppearanceSmall" />
+	        <TextView
+	            android:id="@+id/sysField"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/Systolic"
+	            android:paddingRight="25sp"
+	            android:textAppearance="?android:attr/textAppearanceSmall" />
+	        <TextView
+	            android:id="@+id/diaField"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/Diastolic"
+	            android:paddingRight="25sp"
+	            android:textAppearance="?android:attr/textAppearanceSmall" />
+	        <TextView
+	            android:id="@+id/plsField"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/Pulse"
+	            android:textAppearance="?android:attr/textAppearanceSmall" />
+	    </TableRow>
+	<ScrollView
+	    android:id="@+id/scrollView1"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" >
+		<TableLayout
+		    android:id="@+id/tblList"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content" >
+		    <TableRow
+		        android:id="@+id/tblRow"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content" >
+
+		    </TableRow>
+		</TableLayout>
+	</ScrollView>
 </LinearLayout>

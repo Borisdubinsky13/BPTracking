@@ -35,4 +35,16 @@
 	<string name="updSelection">Update</string>
 	<string name="Export">exprt2CSV</string>
 	<string name="importDB">Import DB</string>
+	<string name="exportDB">Export DB</string>
+    <string name="CleanDBStr">Overwrite the Database?</string>
+    <string name="ImportDB">Importing file:</string>
+    <string name="space"></string>
+    <string name="csvFile">/mnt/sdcard/BldPrsr.csv</string>
+	<string name="YesString">Yes</string>
+	<string name="NoString">No</string>
+	<string name="Systolic">Systolic</string>
+	<string name="Diastolic">Diastolic</string>
+	<string name="Pulse">Pulse</string>
+	<string name="Date">Date</string>
+	<string name="Delete">Delete</string>
 </resources>

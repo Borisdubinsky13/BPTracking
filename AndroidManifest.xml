@@ -3,10 +3,14 @@
       package="com.BldPrsr"
       android:versionName="4.2" android:versionCode="13">
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
-    <application android:icon="@drawable/bloodpressure" android:label="@string/app_name" > 
-<!--	android:backupAgent="MyBackupAgent"> -->
-<!--   	<meta-data android:name="com.google.android.backup.api_key" -->
-<!--    		android:value="AEdPqrEAAAAIJ88pyQvb_deS1rWLOor4qfbfI-Z-SzaJt_WbNw" /> -->
+    <application android:icon="@drawable/bloodpressure" 
+        android:label="@string/app_name" 
+        android:allowBackup="true" 
+        android:killAfterRestore="false" 
+        android:backupAgent=".MyBackupAgent"
+        android:name=".BldPrsr"> 
+   		<meta-data android:name="com.google.android.backup.api_key"
+    		android:value="AEdPqrEAAAAIJ88pyQvb_deS1rWLOor4qfbfI-Z-SzaJt_WbNw" />
         <activity android:label="@string/appname" android:name="com.BldPrsr.BldPrsrMain">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,6 +31,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             </activity>
+<!-- 
 	   	<activity android:label="@string/appname" android:name="com.BldPrsr.BldPrsrMain">
 	   		<intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -34,6 +39,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 	    </activity>
+ -->
 	    <activity android:label="@string/setupName" android:name="com.BldPrsr.BldPrsrSetupWin">
 	    	<intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -58,15 +64,10 @@
 		<activity android:name="org.achartengine.GraphicalActivity"/>
 		<activity android:name="com.google.ads.AdActivity"
               android:configChanges="keyboard|keyboardHidden|orientation"/>
-		<provider android:authorities="com.BldPrsr.provider.userContentProvider"
-							android:name="com.BldPrsr.BldPrsrTrackerProvider" />
 			
 			<!-- The application's publisher ID assigned by AdMob -->
 			<meta-data android:value="a14d18e1cd0e067" android:name="ADMOB_PUBLISHER_ID" />
 	        
-			<!-- AdMobActivity definition -->
-			<activity android:name="com.google.ads.AdActivity"
-			android:configChanges="orientation|keyboard|keyboardHidden" />
 			<!-- Track Market installs -->          
 		<meta-data android:value="true" android:name="ADMOB_ALLOW_LOCATION_FOR_ADS" />    
     </application>
@@ -75,6 +76,6 @@
 	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-	<uses-sdk android:minSdkVersion="8">
+	<uses-sdk android:minSdkVersion="11" android:targetSdkVersion="16">
 	</uses-sdk>
 </manifest>
