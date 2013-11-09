@@ -25,13 +25,18 @@ public class MyDbHelper extends SQLiteOpenHelper {
 	public static String SubTag;
 
 	private static final String DATABASE_NAME = "bldprsr.db";
-	private static final int DATABASE_VERSION = 4;
+	private static final int DATABASE_VERSION = 5;
 
 	private static final String BPDATA_TABLE_NAME = "bpData";
 	private static final String ID_KEY = "_id";
 	private static final String NAME_KEY = "name";
 	private static final String MDATE_KEY = "mDate";
+	private static final String MDATE_DAY_KEY = "mDay";
+	private static final String MDATE_MONTH_KEY = "mMonth";
+	private static final String MDATE_YEAR_KEY = "mYear";
 	private static final String MTIME_KEY = "mTime";
+	private static final String MTIME_MINS_KEY = "mYear";
+	private static final String MTIME_HOURS_KEY = "mYear";
 	private static final String SPRSR_KEY = "sPrsr";
 	private static final String DPRSR_KEY = "dPrsr";
 	private static final String PULSE_KEY = "pulse";
@@ -86,7 +91,9 @@ public class MyDbHelper extends SQLiteOpenHelper {
 			db.execSQL("CREATE TABLE " + BPDATA_TABLE_NAME
 					+ " (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
 					+ "name TEXT, " + "mDate DATE, " + "mTime DATE, "
-					+ "sPrsr TEXT, " + "dPrsr TEXT, " + "pulse TEXT );");
+					+ "mHour TEXT," + "mMins TEXT," + "mDay TEXT, "
+					+ "mMonth TEXT, " + "mYear TEXT, " + "sPrsr TEXT, "
+					+ "dPrsr TEXT, " + "pulse TEXT );");
 		}
 	}
 
@@ -101,6 +108,8 @@ public class MyDbHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
 		SubTag = "onUpgrade(): ";
+		String newTmStr = "00:00";
+		String mDate;
 		BldPrsrLogger.i(TAG, SubTag + "starting an upgrade from " + oldVersion
 				+ " to " + newVersion);
 		/*
@@ -115,8 +124,10 @@ public class MyDbHelper extends SQLiteOpenHelper {
 
 			sql = "CREATE TABLE " + BPDATA_TABLE_NAME
 					+ " (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-					+ "name TEXT, " + "mDate DATE, " + "mTime DATE, "
-					+ "sPrsr TEXT, " + "dPrsr TEXT, " + "pulse TEXT" + ");";
+					+ "name TEXT, " + "mDate DATE, " + "mDay TEXT, "
+					+ "mMonth TEXT, " + "mYear TEXT, " + "mTime DATE, "
+					+ "mHour TEXT," + "mMins TEXT," + "sPrsr TEXT, "
+					+ "dPrsr TEXT, " + "pulse TEXT" + ");";
 			db.execSQL(sql);
 			BldPrsrLogger.i(TAG, SubTag + "exec sql: " + sql);
 			sql = "SELECT * FROM " + BPDATA_TABLE_NAME + "_OLD;";
@@ -133,15 +144,30 @@ public class MyDbHelper extends SQLiteOpenHelper {
 									.length() < 4) {
 						vals.put("name",
 								from.getString(from.getColumnIndex("name")));
-						vals.put("mDate",
-								from.getString(from.getColumnIndex("mDate")));
+						mDate = from.getString(from.getColumnIndex("mDate"));
+						vals.put("mDate", mDate);
+						// Split up date into day, month, year
+						BldPrsrLogger.i(TAG, SubTag + "Date: " + mDate);
+						// Get the month
+						String Year = mDate.substring(0, 4);
+						vals.put("mYear", Year);
+						String Month = mDate.substring(6, 2);
+						vals.put("mYear", Month);
+						String Day = mDate.substring(9, 2);
+						vals.put("mDay", Day);
 						vals.put("sPrsr",
 								from.getString(from.getColumnIndex("dPrsr")));
 						vals.put("dPrsr",
 								from.getString(from.getColumnIndex("sPrsr")));
 						vals.put("pulse",
 								from.getString(from.getColumnIndex("pulse")));
-						vals.put("mTime", "00:00");
+						if (oldVersion >= 4) {
+							newTmStr = from.getString(from
+									.getColumnIndex("mTime"));
+						} else {
+							newTmStr = "00:00";
+						}
+						vals.put("mTime", newTmStr);
 					}
 					db.insert(BPDATA_TABLE_NAME, null, vals);
 				} while (from.moveToNext());
@@ -213,6 +239,69 @@ public class MyDbHelper extends SQLiteOpenHelper {
 							.getColumnIndex(MDATE_KEY)));
 					basicData.setmTime(cursor.getString(cursor
 							.getColumnIndex(MTIME_KEY)));
+
+					// Starting with v5 of DB
+					basicData.setmDay(cursor.getString(cursor
+							.getColumnIndex(MDATE_DAY_KEY)));
+					basicData.setmMonth(cursor.getString(cursor
+							.getColumnIndex(MDATE_MONTH_KEY)));
+					basicData.setmYear(cursor.getString(cursor
+							.getColumnIndex(MDATE_YEAR_KEY)));
+					basicData.setmHours(cursor.getString(cursor
+							.getColumnIndex(MTIME_HOURS_KEY)));
+					basicData.setmMinutes(cursor.getString(cursor
+							.getColumnIndex(MTIME_MINS_KEY)));
+
+					// Adding basic data to list
+					dataList.add(basicData);
+				} while (cursor.moveToNext());
+			}
+		} catch (Exception e) {
+			BldPrsrLogger.e(TAG, SubTag + e.getMessage());
+		}
+		return dataList;
+	}
+
+	public List<BldPrsrBasicData> getData(String sql) {
+		List<BldPrsrBasicData> dataList = new ArrayList<BldPrsrBasicData>();
+		SubTag = "getAllData(): ";
+		try {
+			String selectQuery = "SELECT * FROM " + BPDATA_TABLE_NAME + " "
+					+ sql;
+			SQLiteDatabase db = this.getWritableDatabase();
+			Cursor cursor = db.rawQuery(selectQuery, null);
+
+			// looping through all rows and adding to list
+			if (cursor.moveToFirst()) {
+				do {
+					BldPrsrBasicData basicData = new BldPrsrBasicData();
+					basicData.setId(cursor.getString(cursor
+							.getColumnIndex(ID_KEY)));
+					basicData.setName(cursor.getString(cursor
+							.getColumnIndex(NAME_KEY)));
+					basicData.setdPrsr(cursor.getString(cursor
+							.getColumnIndex(DPRSR_KEY)));
+					basicData.setsPrsr(cursor.getString(cursor
+							.getColumnIndex(SPRSR_KEY)));
+					basicData.setPulse(cursor.getString(cursor
+							.getColumnIndex(PULSE_KEY)));
+					basicData.setmDate(cursor.getString(cursor
+							.getColumnIndex(MDATE_KEY)));
+					basicData.setmTime(cursor.getString(cursor
+							.getColumnIndex(MTIME_KEY)));
+
+					// Starting with v5 of DB
+					basicData.setmDay(cursor.getString(cursor
+							.getColumnIndex(MDATE_DAY_KEY)));
+					basicData.setmMonth(cursor.getString(cursor
+							.getColumnIndex(MDATE_MONTH_KEY)));
+					basicData.setmYear(cursor.getString(cursor
+							.getColumnIndex(MDATE_YEAR_KEY)));
+					basicData.setmHours(cursor.getString(cursor
+							.getColumnIndex(MTIME_HOURS_KEY)));
+					basicData.setmMinutes(cursor.getString(cursor
+							.getColumnIndex(MTIME_MINS_KEY)));
+
 					// Adding basic data to list
 					dataList.add(basicData);
 				} while (cursor.moveToNext());
@@ -277,6 +366,12 @@ public class MyDbHelper extends SQLiteOpenHelper {
 		values.put(PULSE_KEY, bd.getPulse());
 		values.put(MDATE_KEY, bd.getmDate());
 		values.put(MTIME_KEY, bd.getmTime());
+		// Starting with v5 of DB
+		values.put(MDATE_DAY_KEY, bd.getmDay());
+		values.put(MDATE_MONTH_KEY, bd.getmMonth());
+		values.put(MDATE_YEAR_KEY, bd.getmYear());
+		values.put(MTIME_HOURS_KEY, bd.getmHours());
+		values.put(MTIME_MINS_KEY, bd.getmMinutes());
 
 		// updating row
 		rc = db.update(BPDATA_TABLE_NAME, values, ID_KEY + " = ?",

@@ -1,19 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
-	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:orientation="vertical" android:id="@+id/graphanalysis">
-	<com.google.ads.AdView android:id="@+id/adDataAnalysis"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		ads:adUnitId="a14df398d995026" ads:adSize="BANNER" />
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+    android:id="@+id/graphanalysis"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <com.google.ads.AdView
+        android:id="@+id/adDataAnalysis"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        ads:adSize="BANNER"
+        ads:adUnitId="a14df398d995026" >
+    </com.google.ads.AdView>
+
 	<TableLayout android:layout_height="wrap_content"
 		android:gravity="top" android:id="@+id/topTable" android:layout_width="wrap_content"
 		android:layout_gravity="center_horizontal">
 		<TableRow>
-			<EditText android:text="Systolic" android:id="@+id/SPressure" android:inputType="numberDecimal" android:autoText="false" android:selectAllOnFocus="true"/>
-			<EditText android:text="Diastolic" android:id="@+id/DPressure" android:inputType="numberDecimal" android:autoText="false" android:selectAllOnFocus="true"/>
-			<EditText android:text="Pulse" android:id="@+id/pulse" android:inputType="numberDecimal" android:autoText="false" android:selectAllOnFocus="true"/>
-			<Button android:text="Date" android:layout_height="wrap_content" android:id="@+id/dateButton" android:layout_width="wrap_content"></Button>
+
+			<EditText
+			    android:id="@+id/SPressure"
+			    android:layout_width="80dp"
+			    android:autoText="false"
+			    android:gravity="center_vertical|center_horizontal"
+			    android:inputType="numberDecimal"
+			    android:selectAllOnFocus="true"
+			    android:text="Systolic"
+			    android:textSize="12sp" />
+
+			<EditText
+			    android:id="@+id/DPressure"
+			    android:layout_width="80dp"
+			    android:autoText="false"
+			    android:gravity="center_vertical|center_horizontal"
+			    android:inputType="numberDecimal"
+			    android:selectAllOnFocus="true"
+			    android:text="Diastolic"
+			    android:textSize="12sp" />
+
+			<EditText
+			    android:id="@+id/pulse"
+			    android:layout_width="80dp"
+			    android:autoText="false"
+			    android:gravity="center_vertical|center_horizontal"
+			    android:inputType="numberDecimal"
+			    android:selectAllOnFocus="true"
+			    android:text="Pulse"
+			    android:textSize="12sp" />
+
+			<Button
+			    android:id="@+id/dateButton"
+			    android:layout_height="wrap_content"
+			    android:layout_width="80dp"
+			    android:text="Date"
+			    android:textSize="12sp" />
+
 		</TableRow>
 	</TableLayout>
 	<TableLayout android:layout_height="wrap_content"

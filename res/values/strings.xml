@@ -47,4 +47,10 @@
 	<string name="Pulse">Pulse</string>
 	<string name="Date">Date</string>
 	<string name="Delete">Delete</string>
+	<string name="SDate">SDate</string>
+	<string name="EDate">EDate</string>
+	<string name="StartDate">Start Date:</string>
+	<string name="EndDate">End Date:</string>
+	<string name="ok">OK</string>
+	<string name="report">Report</string>
 </resources>

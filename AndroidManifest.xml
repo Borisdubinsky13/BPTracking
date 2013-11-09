@@ -24,7 +24,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 	    </activity>
-	   	<activity android:label="@string/appname" android:name="com.BldPrsr.BldPrsrList">
+	   	<activity android:label="@string/appname" android:name="com.BldPrsr.BldPrsrFilterScreen">
+	   		<intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.PICK" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            </activity>
+            
+            <activity android:label="@string/appname" android:name="com.BldPrsr.BldPrsrList">
 	   		<intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.PICK" />

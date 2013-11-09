@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical"
+              android:id="@+id/displayquerydata">
+    <com.google.ads.AdView
+        android:id="@+id/adDataAnalysis"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        ads:adSize="BANNER"
+        ads:adUnitId="a14df398d995026" >
+    </com.google.ads.AdView>
+
+	<TableLayout
+		android:layout_height="wrap_content"
+		android:gravity="top"
+		android:id="@+id/topTable"
+		android:layout_width="fill_parent">
+		<TableRow>
+			<TextView android:layout_gravity="center" 
+				android:text="@string/StartDate"/>
+			<Button android:text="@string/SDate"
+				android:id="@+id/startDateButton"
+				android:layout_height="wrap_content"
+				android:layout_width="180dp"
+				/>
+		</TableRow>
+		<TableRow>
+			<TextView android:layout_gravity="center" 
+				android:text="@string/EndDate"/>
+			<Button android:text="@string/EDate"
+				android:id="@+id/endDateButton"
+				android:layout_height="wrap_content"
+				android:layout_width="180dp" />
+		</TableRow>
+	</TableLayout>
+
+	<Button
+	    android:id="@+id/report"
+	    android:layout_width="200dp"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center_horizontal"
+	    android:text="@string/report" />
+
+</LinearLayout>

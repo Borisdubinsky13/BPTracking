@@ -104,17 +104,15 @@ public class BldPrsrMain extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent iAbout = new Intent(this, AboutHandler.class);
 		Intent iList = new Intent(this, BldPrsrList.class);
+		Intent iFilter = new Intent(this, BldPrsrFilterScreen.class);
 		// Intent iAddUser = new Intent(this, BldPrsrSetupWin.class);
 
 		// Handle item selection
 		switch (item.getItemId()) {
-		/*
-		 * case R.id.AddUser: BldPrsrLogger.i(TAG, SubTag + "User " +
-		 * "trying to start AddUser"); startActivity(iAddUser); return true;
-		 */
 		case R.id.List:
 			BldPrsrLogger.i(TAG, SubTag + "User " + "trying to start List");
-			startActivity(iList);
+			startActivity(iFilter);
+			// startActivity(iList);
 			return true;
 		case R.id.About:
 			BldPrsrLogger.i(TAG, SubTag + "User " + "trying to start ABOUT");
@@ -197,7 +195,6 @@ public class BldPrsrMain extends Activity {
 							});
 						}
 					}
-
 				}
 				bos.close();
 				progressDialog.dismiss();

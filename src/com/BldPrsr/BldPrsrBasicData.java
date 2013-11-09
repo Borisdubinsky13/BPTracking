@@ -19,6 +19,11 @@ public class BldPrsrBasicData {
 	private String sPrsr;
 	private String dPrsr;
 	private String pulse;
+	private String mDay;
+	private String mMonth;
+	private String mYear;
+	private String mHours;
+	private String mMinutes;
 
 	/**
 	 * @return the id
@@ -137,6 +142,81 @@ public class BldPrsrBasicData {
 		SubTag = "setPulse(): ";
 		BldPrsrLogger.i(TAG, SubTag + "pulse=" + pulse);
 		this.pulse = pulse;
+	}
+
+	/**
+	 * @return the mDay
+	 */
+	public String getmDay() {
+		return mDay;
+	}
+
+	/**
+	 * @param mDay
+	 *            the mDay to set
+	 */
+	public void setmDay(String mDay) {
+		this.mDay = mDay;
+	}
+
+	/**
+	 * @return the mMonth
+	 */
+	public String getmMonth() {
+		return mMonth;
+	}
+
+	/**
+	 * @param mMonth
+	 *            the mMonth to set
+	 */
+	public void setmMonth(String mMonth) {
+		this.mMonth = mMonth;
+	}
+
+	/**
+	 * @return the mYear
+	 */
+	public String getmYear() {
+		return mYear;
+	}
+
+	/**
+	 * @param mYear
+	 *            the mYear to set
+	 */
+	public void setmYear(String mYear) {
+		this.mYear = mYear;
+	}
+
+	/**
+	 * @return the mHours
+	 */
+	public String getmHours() {
+		return mHours;
+	}
+
+	/**
+	 * @param mHours
+	 *            the mHours to set
+	 */
+	public void setmHours(String mHours) {
+		this.mHours = mHours;
+	}
+
+	/**
+	 * @return the mMinutes
+	 */
+	public String getmMinutes() {
+		return mMinutes;
+	}
+
+	/**
+	 * @param mMinutes
+	 *            the mMinutes to set
+	 */
+	public void setmMinutes(String mMinutes) {
+		this.mMinutes = mMinutes;
 	}
 
 }

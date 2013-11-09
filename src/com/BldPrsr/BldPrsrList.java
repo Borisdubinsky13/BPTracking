@@ -28,14 +28,6 @@ public class BldPrsrList extends Activity {
 	public static final String PREFS_NAME = "BldPrsrFile";
 	private static final String PREF_USERNAME = "username";
 
-	// private static TableRow tblRow = null;
-
-	// private static final String PREF_ID = "dataTBL_ID";
-
-	// private Cursor result;
-
-	// public SimpleCursorAdapter items;
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -54,28 +46,38 @@ public class BldPrsrList extends Activity {
 		setContentView(R.layout.list);
 		SubTag = "onResume(): ";
 
-		// registerForContextMenu(getListView());
+		List<BldPrsrBasicData> lstData = null;
+		String sql = null;
 
 		AdView adView = (AdView) findViewById(R.id.adListRes);
 		// Initiate a generic request to load it with an ad
 		adView.loadAd(new AdRequest());
 
 		BldPrsrLogger.i(TAG, SubTag + "ListRes()");
-		SharedPreferences pref = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+		SharedPreferences pref = getSharedPreferences("bldprsr", MODE_PRIVATE);
 		String username = pref.getString(PREF_USERNAME, null);
+		String startDate = pref.getString("startdate", "");
+		String endDate = pref.getString("enddate", "");
 		this.setTitle("User: " + username);
 
 		MyDbHelper db = new MyDbHelper(this);
-		List<BldPrsrBasicData> lstData = db.getAllData();
+		if (startDate.equals("") && endDate.equals("")) {
+			lstData = db.getAllData();
+		} else {
+			if (!startDate.equals("")) {
+				sql = "WHERE mDate > \"" + startDate + "\"";
+			}
+			if (!endDate.equals("") && sql.equals("")) {
+				sql = "WHERE mDate < \"" + endDate + "\"";
+			}
+			if (!endDate.equals("") && !sql.equals("")) {
+				sql += " AND mDate < \"" + endDate + "\"";
+			}
+			sql += ";";
+			lstData = db.getData(sql);
+		}
+
 		TableLayout tbl = (TableLayout) findViewById(R.id.tblList);
-		/*
-		 * TableRow tblRow = (TableRow) findViewById(R.id.tblRow);
-		 * 
-		 * TextView dateF = (TextView) findViewById(R.id.dtField); TextView
-		 * sysField = (TextView) findViewById(R.id.sysField); TextView diaField
-		 * = (TextView) findViewById(R.id.diaField); TextView plsField =
-		 * (TextView) findViewById(R.id.plsField);
-		 */
 		for (BldPrsrBasicData bd : lstData) {
 			final TableRow tblRow = new TableRow(this);
 
