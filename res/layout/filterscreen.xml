@@ -5,13 +5,14 @@
               android:layout_height="fill_parent"
               android:orientation="vertical"
               android:id="@+id/displayquerydata">
-    <com.google.ads.AdView
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adDataAnalysis"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         ads:adSize="BANNER"
-        ads:adUnitId="a14df398d995026" >
-    </com.google.ads.AdView>
+		ads:adUnitId="a14d18e1cd0e067"/>
+
 
 	<TableLayout
 		android:layout_height="wrap_content"

@@ -10,7 +10,6 @@ import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -66,15 +65,14 @@ public class ImportActivity extends Activity {
 		progressDialog.show();
 		Log.i(TAG, SubTag + "Process Dialog has been setup!");
 
-		final MyDbHelper db = new MyDbHelper(context);
+		// final MyDbHelper db = new MyDbHelper(context);
 
 		try {
 			new Thread(new Runnable() {
 				public void run() {
 					int curPercent = 0;
-					Uri tmpUri = Uri
-							.parse("content://com.BldPrsr.provider.userContentProvider");
-					tmpUri = Uri.withAppendedPath(tmpUri, "bpData");
+
+					MyDbHelper db = new MyDbHelper(context);
 					SharedPreferences pref = getSharedPreferences(PREFS_NAME,
 							MODE_PRIVATE);
 					String username = pref.getString(PREF_USERNAME, null);
@@ -109,7 +107,7 @@ public class ImportActivity extends Activity {
 								// separated fields.
 								startExt = 0;
 								endExt = line.indexOf(delimeter);
-								String date = line.substring(0, endExt);
+								// String date = line.substring(0, endExt);
 								String evYear = line.substring(0, 4);
 								String evMonth = line.substring(5, 7);
 								String evDay = line.substring(8, 10);

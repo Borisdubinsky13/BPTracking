@@ -75,7 +75,7 @@ public class BldPrsrTrendline
     	this.xxSum += (x*x);
     	this.xySum += (x*y);
     	this.values.add(y);
-    	BldPrsrLogger.i(TAG, SubTag + "Adding (" + x + "," + y + ")");
+    	// BldPrsrLogger.i(TAG, SubTag + "Adding (" + x + "," + y + ")");
     }
     
     private double CalculateSlope()
@@ -121,7 +121,11 @@ public class BldPrsrTrendline
     	int	i;
     	double	delta;
     	double	val;
-    	
+
+    	if (trendVals.getItemCount() > 0) {
+    		// Clean up the trend.
+    		trendVals.clear();
+    	}
     	this.Slope = CalculateSlope();
     	this.Intercept = CalculateIntercept();
     	this.Start = CalculateStart();
@@ -134,15 +138,18 @@ public class BldPrsrTrendline
     	BldPrsrLogger.i(TAG, SubTag + "start: " + this.Start + " end: " + this.End + " delta: " + delta );
     	trendVals.add(0, this.Start);
     	BldPrsrLogger.i(TAG, SubTag + "Add: 0," + this.Start );
+    	BldPrsrLogger.i(TAG, SubTag + "Adding " + this.count + " entries");
+    	// trendVals.add(1, val);
     	for ( i = 1; i < this.count; i++ )
     	{
     		val += delta;
     		BldPrsrLogger.i(TAG, SubTag + "Add: " + i + "," + val);
-    		trendVals.add(i, val);
+    		// trendVals.add(i, val);
     	}
+    	// trendVals.add(i, val);
     	BldPrsrLogger.i(TAG, SubTag + "Add: " + i + "," + this.End );
     	trendVals.add(i, this.End);
-    	
+    	BldPrsrLogger.i(TAG, SubTag + "Number of entries: " + trendVals.getItemCount());
     	return trendVals;
     }
 }
