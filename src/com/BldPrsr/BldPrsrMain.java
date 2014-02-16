@@ -42,8 +42,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.ads.AdRequest;
-import com.google.ads.AdView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 public class BldPrsrMain extends Activity {
 	/*
@@ -103,7 +103,6 @@ public class BldPrsrMain extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent iAbout = new Intent(this, AboutHandler.class);
-		Intent iList = new Intent(this, BldPrsrList.class);
 		Intent iFilter = new Intent(this, BldPrsrFilterScreen.class);
 		// Intent iAddUser = new Intent(this, BldPrsrSetupWin.class);
 
@@ -122,6 +121,10 @@ public class BldPrsrMain extends Activity {
 			BldPrsrLogger.i(TAG, SubTag + "trying to import data");
 			Intent importAct = new Intent(this, ImportActivity.class);
 			startActivity(importAct);
+			return true;
+		case R.id.Settings:
+            Intent iPrefs = new Intent(this, BldPrsrPrefActivity.class);
+            startActivity(iPrefs);
 			return true;
 		case R.id.Export:
 			try {
@@ -237,7 +240,7 @@ public class BldPrsrMain extends Activity {
 					+ androidId);
 			BldPrsrLogger.enableLogging(Log.ERROR);
 		}
-		BldPrsrLogger.enableLogging(Log.VERBOSE);
+		BldPrsrLogger.enableLogging(Log.ERROR);
 		BldPrsrLogger.i(TAG, SubTag + " Enter onCreate() ");
 
 		// First check if there are any users. If not, then switch to setup
@@ -262,19 +265,6 @@ public class BldPrsrMain extends Activity {
 				getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit()
 						.putString(PREF_USERNAME, username).commit();
 
-				// update database to make sure that all entries have username =
-				// primary google account.
-				// See if there are any data that has name other then current
-				// username
-				/*
-				 * Uri tmpUri =
-				 * Uri.parse("content://com.BldPrsr.provider.userContentProvider"
-				 * ); tmpUri = Uri.withAppendedPath(tmpUri,"bpData");
-				 * 
-				 * ContentValues vals = new ContentValues(); ContentResolver cr
-				 * = getContentResolver(); vals.put("name", username);
-				 * cr.update(tmpUri, vals, "name != '" + username + "'", null);
-				 */
 			}
 		} catch (Exception e) {
 			BldPrsrLogger.e(TAG, SubTag + e.getMessage());
@@ -283,6 +273,7 @@ public class BldPrsrMain extends Activity {
 
 	public void displayCharts() {
 		SubTag = "displayCharts(): ";
+		BldPrsrLogger.enableLogging(Log.VERBOSE);
 
 		XYMultipleSeriesDataset mDataset = new XYMultipleSeriesDataset();
 		String query = null;
@@ -290,6 +281,7 @@ public class BldPrsrMain extends Activity {
 		int min = 0, max = 0;
 		int k = 0;
 		XYSeriesRenderer r;
+		currentCount = 0;
 
 		query = "name = '" + username + "'";
 		BldPrsrLogger.i(TAG, SubTag + "Query: " + query);
@@ -301,7 +293,6 @@ public class BldPrsrMain extends Activity {
 		// Cursor result = managedQuery(tmpUri, projection, query, null, null);
 		BldPrsrLogger.i(TAG, SubTag + "there are " + recCount + " records");
 		for (BldPrsrBasicData bd : dataList) {
-			BldPrsrLogger.i(TAG, SubTag + "got result back from provider");
 
 			int dValue;
 			try {
@@ -337,7 +328,7 @@ public class BldPrsrMain extends Activity {
 			systolic.add(cnt, dValue);
 			systDef.add(cnt, 120);
 			systTrend.addXY(cnt, dValue);
-			BldPrsrLogger.i(TAG, SubTag + "sPrsr: " + dValue);
+			// BldPrsrLogger.i(TAG, SubTag + "sPrsr: " + dValue);
 
 			try {
 				dValue = Integer.parseInt(bd.getPulse());
@@ -356,10 +347,17 @@ public class BldPrsrMain extends Activity {
 			cnt++;
 		}
 
+		BldPrsrLogger.i(TAG, SubTag + "Processed " + cnt + " entries");
+		
 		mDataset.addSeries(diastolic);
 		mDataset.addSeries(systolic);
 		mDataset.addSeries(sPulse);
-		mDataset.addSeries(diasTrend.getTheTrend());
+
+		XYSeries dTr = diasTrend.getTheTrend();
+		BldPrsrLogger.i(TAG,
+				SubTag + "trend point count: " + dTr.getItemCount());
+
+		mDataset.addSeries(dTr);
 		mDataset.addSeries(systTrend.getTheTrend());
 		mDataset.addSeries(pulseTrend.getTheTrend());
 
@@ -450,6 +448,7 @@ public class BldPrsrMain extends Activity {
 		} catch (Exception e) {
 			BldPrsrLogger.e(TAG, SubTag + e.getMessage());
 		}
+		BldPrsrLogger.enableLogging(Log.ERROR);
 	}
 
 	@Override
@@ -461,7 +460,12 @@ public class BldPrsrMain extends Activity {
 		setContentView(R.layout.bldprsmain);
 
 		AdView adView = (AdView) findViewById(R.id.adDataAnalysis);
-		adView.loadAd(new AdRequest());
+	    AdRequest adRequest = new AdRequest.Builder()
+			.addTestDevice("1C9D5807CADB9259EB3804DDC582DC3C")
+			.addTestDevice("5AECA86F6A4E6EB1C1B6907DDFB5086D")
+			.build();
+	    // Load the adView with the ad request.
+	    adView.loadAd(adRequest);
 
 		final Calendar c = Calendar.getInstance();
 
@@ -479,12 +483,13 @@ public class BldPrsrMain extends Activity {
 		String evMonthS = String.format("%02d", mMonth);
 		String evDayS = String.format("%02d", mDay);
 		String dateStr = evYearS + "/" + evMonthS + "/" + evDayS;
-
+/*
 		final int mHour = c.get(Calendar.HOUR_OF_DAY);
 		final int mMinutes = c.get(Calendar.MINUTE);
+		
 		String evHour = String.format("%02d", mHour);
 		String evMinutes = String.format("%02d", mMinutes);
-
+*/
 		Log.d(TAG, SubTag + "Refreshing the chart....");
 		displayCharts();
 

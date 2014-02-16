@@ -4,6 +4,7 @@
 		<item android:id="@+id/List" android:title="@string/listStr" android:icon="@android:drawable/ic_menu_view"></item>
 		<item android:id="@+id/Export" android:title="@string/Export" android:icon="@android:drawable/ic_menu_share"></item>
 		<item android:id="@+id/importDB" android:title="@string/importDB" android:icon="@android:drawable/ic_menu_edit"></item>
+		<item android:id="@+id/Settings" android:title="@string/Settings" android:icon="@android:drawable/ic_menu_info_details"></item>
 		<item android:id="@+id/About" android:title="@string/aboutName" android:icon="@android:drawable/ic_menu_info_details"></item>
 	</group>
 </menu>

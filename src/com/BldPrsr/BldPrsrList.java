@@ -4,17 +4,21 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.ads.AdRequest;
-import com.google.ads.AdView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 public class BldPrsrList extends Activity {
 
@@ -27,6 +31,11 @@ public class BldPrsrList extends Activity {
 
 	public static final String PREFS_NAME = "BldPrsrFile";
 	private static final String PREF_USERNAME = "username";
+	private static String username;
+	private String	txtReport;
+	
+	private String	startDate;
+	private String	endDate;
 
 	/*
 	 * (non-Javadoc)
@@ -49,15 +58,47 @@ public class BldPrsrList extends Activity {
 		List<BldPrsrBasicData> lstData = null;
 		String sql = null;
 
-		AdView adView = (AdView) findViewById(R.id.adListRes);
-		// Initiate a generic request to load it with an ad
-		adView.loadAd(new AdRequest());
+		AdView adView = (AdView) findViewById(R.id.adDataAnalysis);
+	    AdRequest adRequest = new AdRequest.Builder()
+			.addTestDevice("1C9D5807CADB9259EB3804DDC582DC3C")
+			.addTestDevice("5AECA86F6A4E6EB1C1B6907DDFB5086D")
+			.build();
+	    // Load the adView with the ad request.
+	    adView.loadAd(adRequest);
+		final SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+		Button Snd2Doc = (Button) findViewById(R.id.Snd2Doc);
+		Snd2Doc.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				String docEmail = mySharedPreferences.getString("DocEmail", "");
+				// Send email to the doctor
+				Intent i = new Intent(Intent.ACTION_SEND);
+				i.setType("message/rfc822");
+				i.putExtra(Intent.EXTRA_EMAIL, new String[]{docEmail});
+				i.putExtra(Intent.EXTRA_SUBJECT, "Blood pressure measurements (" + startDate +
+						"-" + endDate + ")");
+				i.putExtra(Intent.EXTRA_TEXT, txtReport);
+				try {
+				    startActivity(Intent.createChooser(i, "Send mail..."));
+				} catch (android.content.ActivityNotFoundException ex) {
+				    Toast.makeText(context, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
+		
+		Button cancelB = (Button) findViewById(R.id.cncl);
+		cancelB.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				finish();
+			}
+		});
 
 		BldPrsrLogger.i(TAG, SubTag + "ListRes()");
-		SharedPreferences pref = getSharedPreferences("bldprsr", MODE_PRIVATE);
-		String username = pref.getString(PREF_USERNAME, null);
-		String startDate = pref.getString("startdate", "");
-		String endDate = pref.getString("enddate", "");
+		SharedPreferences pref = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+		username = pref.getString(PREF_USERNAME, null);
+
+		startDate = pref.getString("startdate", "");
+		endDate = pref.getString("enddate", "");
 		this.setTitle("User: " + username);
 
 		MyDbHelper db = new MyDbHelper(this);
@@ -77,6 +118,7 @@ public class BldPrsrList extends Activity {
 			lstData = db.getData(sql);
 		}
 
+		txtReport = "";
 		TableLayout tbl = (TableLayout) findViewById(R.id.tblList);
 		for (BldPrsrBasicData bd : lstData) {
 			final TableRow tblRow = new TableRow(this);
@@ -99,6 +141,10 @@ public class BldPrsrList extends Activity {
 			plsField.setText(bd.getPulse());
 			plsField.setPadding(0, 0, 70, 0);
 
+			txtReport += (bd.getmDate() + ": Pressure: (" +
+							bd.getsPrsr() + "/" +
+							bd.getdPrsr() + "), Pulse: " +
+							bd.getPulse() + "\n");
 			tblRow.addView(dateF);
 			tblRow.addView(sysField);
 			tblRow.addView(diaField);
@@ -119,7 +165,6 @@ public class BldPrsrList extends Activity {
 				}
 			});
 			tbl.addView(tblRow);
-
 		}
 	}
 

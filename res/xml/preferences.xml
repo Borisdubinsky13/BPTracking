@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+	<PreferenceCategory
+		android:title="Settings">
+	    <EditTextPreference 
+	        android:title="@string/DocEmail" 
+	        android:dialogTitle="@string/DocEmail"
+	        android:dialogMessage="Where to send the report"
+	        android:summary="Your Doctor's email"
+	        android:key="DocEmail"/>
+	</PreferenceCategory>
+</PreferenceScreen>

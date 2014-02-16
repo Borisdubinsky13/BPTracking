@@ -53,4 +53,6 @@
 	<string name="EndDate">End Date:</string>
 	<string name="ok">OK</string>
 	<string name="report">Report</string>
+	<string name="Settings">Settings</string>
+	<string name="DocEmail">Doctor\'s E-Mail</string>
 </resources>

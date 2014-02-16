@@ -1,42 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
 	android:orientation="vertical" 
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent" 
 	android:id="@+id/listres">
-	<com.google.ads.AdView android:id="@+id/adListRes"
-		android:layout_width="fill_parent" 
-		android:layout_height="wrap_content"
-		ads:adUnitId="a14df398d995026" 
-		ads:adSize="BANNER" />
-	    <TableRow
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adDataAnalysis"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        ads:adSize="BANNER"
+		ads:adUnitId="a14d18e1cd0e067"/>
+    <LinearLayout 
+    	android:layout_width="fill_parent"
+    	android:orientation="horizontal"
+    	android:layout_height="wrap_content">
+		<TableRow
 	        android:id="@+id/tblRowH"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:orientation="horizontal"
 	        android:textAlignment="center" >
-
 	        <TextView
 	            android:id="@+id/dtField"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:text="@string/Date"
-	            android:paddingRight="65sp"
+	            android:paddingRight="25sp"
+	            android:paddingLeft="25sp"
 	            android:textAppearance="?android:attr/textAppearanceSmall" />
 	        <TextView
 	            android:id="@+id/sysField"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:text="@string/Systolic"
-	            android:paddingRight="25sp"
+	            android:paddingRight="5sp"
 	            android:textAppearance="?android:attr/textAppearanceSmall" />
 	        <TextView
 	            android:id="@+id/diaField"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:text="@string/Diastolic"
-	            android:paddingRight="25sp"
+	            android:paddingRight="5sp"
 	            android:textAppearance="?android:attr/textAppearanceSmall" />
 	        <TextView
 	            android:id="@+id/plsField"
@@ -44,21 +49,44 @@
 	            android:layout_height="wrap_content"
 	            android:text="@string/Pulse"
 	            android:textAppearance="?android:attr/textAppearanceSmall" />
-	    </TableRow>
-	<ScrollView
-	    android:id="@+id/scrollView1"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content" >
-		<TableLayout
-		    android:id="@+id/tblList"
+	    </TableRow>	        
+	</LinearLayout>
+	<LinearLayout
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:layout_weight="1">    
+		<ScrollView
+		    android:id="@+id/scrollView1"
 		    android:layout_width="match_parent"
 		    android:layout_height="wrap_content" >
-		    <TableRow
-		        android:id="@+id/tblRow"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content" >
-
-		    </TableRow>
-		</TableLayout>
-	</ScrollView>
+			<TableLayout
+			    android:id="@+id/tblList"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content" >
+			    <TableRow
+			        android:id="@+id/tblRow"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content" >
+			    </TableRow>
+			</TableLayout>
+		</ScrollView>
+	</LinearLayout>
+	<LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:paddingTop="6dip">
+		    <Button
+		        android:id="@+id/Snd2Doc"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:layout_width="0dp"
+		        android:text="Send to Doc" />
+		    <Button
+		        android:id="@+id/cncl"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:layout_width="0dp"
+		        android:text="Done" />
+	</LinearLayout>	
 </LinearLayout>

@@ -67,7 +67,11 @@ public class BldPrsrFilterScreen extends Activity {
 		final int mYearE = c.get(Calendar.YEAR);
 		final int mMonthE = c.get(Calendar.MONTH) + 1;
 		final int mDayE = c.get(Calendar.DAY_OF_MONTH);
-
+		startSearchDate = null;
+		sDatePreset = false;
+		endSearchDate = null;
+		eDatePreset = false;
+		
 		super.onResume();
 		setContentView(R.layout.filterscreen);
 
@@ -96,14 +100,16 @@ public class BldPrsrFilterScreen extends Activity {
 		reportB = (Button) findViewById(R.id.report);
 		reportB.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				if (sDatePreset == true) {
-					getSharedPreferences("bldprsr", MODE_PRIVATE).edit()
+				if (sDatePreset == false)
+					startSearchDate = "";
+				if (eDatePreset == false) 
+					endSearchDate = "";
+				
+				getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit()
 							.putString("startdate", startSearchDate).commit();
-				}
-				if (eDatePreset == true) {
-					getSharedPreferences("bldprsr", MODE_PRIVATE).edit()
+				getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit()
 							.putString("enddate", endSearchDate).commit();
-				}
+
 				Intent iViewRes = new Intent(BldPrsrFilterScreen.this,
 						BldPrsrList.class);
 				startActivity(iViewRes);

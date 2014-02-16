@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
     android:id="@+id/graphanalysis"
     android:layout_width="wrap_content"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-
-    <com.google.ads.AdView
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adDataAnalysis"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         ads:adSize="BANNER"
-        ads:adUnitId="a14df398d995026" >
-    </com.google.ads.AdView>
+		ads:adUnitId="a14d18e1cd0e067"/>
 
 	<TableLayout android:layout_height="wrap_content"
 		android:gravity="top" android:id="@+id/topTable" android:layout_width="wrap_content"
