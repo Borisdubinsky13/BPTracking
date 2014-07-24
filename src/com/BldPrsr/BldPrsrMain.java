@@ -29,6 +29,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
@@ -62,22 +63,6 @@ public class BldPrsrMain extends Activity {
 	String[] projection = new String[] { "_id", "name", "mDate", "dPrsr",
 			"sPrsr", "pulse" };
 
-	private XYMultipleSeriesRenderer mRenderer = null;
-
-	/* Refresh the view that has the chart */
-	private XYSeries diastolic = new XYValueSeries("Diastolic");
-	private XYSeries systolic = new XYValueSeries("Systolic");
-	private XYSeries sPulse = new XYValueSeries("Pulse");
-
-	private XYSeries diasDef = new XYValueSeries("Base Diastolic (80)");
-	private XYSeries systDef = new XYValueSeries("Base Systolic (120)");
-	private XYSeries pulsDef = new XYValueSeries("Base Pulse (65)");
-
-	/* Create the series for the trend line */
-	private BldPrsrTrendline diasTrend = new BldPrsrTrendline("Dias. Trend");
-	private BldPrsrTrendline systTrend = new BldPrsrTrendline("Syst. Trend");
-	private BldPrsrTrendline pulseTrend = new BldPrsrTrendline("Pulse Trend");
-
 	private final int[] colors = new int[] { Color.CYAN, Color.RED,
 			Color.YELLOW, Color.CYAN, Color.RED, Color.YELLOW };
 	private final PointStyle[] styles = new PointStyle[] { PointStyle.SQUARE,
@@ -87,6 +72,8 @@ public class BldPrsrMain extends Activity {
 	private Handler mHandler = new Handler();
 	private ProgressDialog progressDialog;
 	private int currentCount;
+	
+	private String mainscreendisplay;
 
 	String eventDate;
 	Button dateB;
@@ -274,6 +261,19 @@ public class BldPrsrMain extends Activity {
 	public void displayCharts() {
 		SubTag = "displayCharts(): ";
 		BldPrsrLogger.enableLogging(Log.VERBOSE);
+		/* Refresh the view that has the chart */
+		XYSeries diastolic = new XYValueSeries("Diastolic");
+		XYSeries systolic = new XYValueSeries("Systolic");
+		XYSeries sPulse = new XYValueSeries("Pulse");
+
+		XYSeries diasDef = new XYValueSeries("Base Diastolic (80)");
+		XYSeries systDef = new XYValueSeries("Base Systolic (120)");
+		XYSeries pulsDef = new XYValueSeries("Base Pulse (65)");
+
+		/* Create the series for the trend line */
+		BldPrsrTrendline diasTrend = new BldPrsrTrendline("Dias. Trend");
+		BldPrsrTrendline systTrend = new BldPrsrTrendline("Syst. Trend");
+		BldPrsrTrendline pulseTrend = new BldPrsrTrendline("Pulse Trend");
 
 		XYMultipleSeriesDataset mDataset = new XYMultipleSeriesDataset();
 		String query = null;
@@ -288,7 +288,23 @@ public class BldPrsrMain extends Activity {
 
 		List<BldPrsrBasicData> dataList = new ArrayList<BldPrsrBasicData>();
 		MyDbHelper db = new MyDbHelper(context);
-		dataList = db.getAllData();
+		// get the data based on user preferences
+
+		if (mainscreendisplay.equals("1")) {
+			// Do all data
+			dataList = db.getAllData();
+		}
+
+		if (mainscreendisplay.equals("2")) {
+			// do Current month
+			dataList = db.getCurrentMonthData();
+			// dataList = db.getAllData();
+		}
+		if (mainscreendisplay.equals("3")) {
+			// do last 30 entries
+			dataList = db.getLast30EntriesData();
+		}
+
 		int recCount = db.getRecordCount();
 		// Cursor result = managedQuery(tmpUri, projection, query, null, null);
 		BldPrsrLogger.i(TAG, SubTag + "there are " + recCount + " records");
@@ -313,7 +329,6 @@ public class BldPrsrMain extends Activity {
 				if (dValue < min)
 					min = dValue;
 			}
-			BldPrsrLogger.i(TAG, SubTag + "dPrsr: " + dValue);
 
 			try {
 				dValue = Integer.parseInt(bd.getsPrsr());
@@ -328,7 +343,6 @@ public class BldPrsrMain extends Activity {
 			systolic.add(cnt, dValue);
 			systDef.add(cnt, 120);
 			systTrend.addXY(cnt, dValue);
-			// BldPrsrLogger.i(TAG, SubTag + "sPrsr: " + dValue);
 
 			try {
 				dValue = Integer.parseInt(bd.getPulse());
@@ -343,7 +357,6 @@ public class BldPrsrMain extends Activity {
 			sPulse.add(cnt, dValue);
 			pulsDef.add(cnt, 70);
 			pulseTrend.addXY(cnt, dValue);
-			BldPrsrLogger.i(TAG, SubTag + "Pulse: " + dValue);
 			cnt++;
 		}
 
@@ -361,76 +374,73 @@ public class BldPrsrMain extends Activity {
 		mDataset.addSeries(systTrend.getTheTrend());
 		mDataset.addSeries(pulseTrend.getTheTrend());
 
-		if (mRenderer == null) {
-			mRenderer = new XYMultipleSeriesRenderer();
-			mRenderer.setAxisTitleTextSize(16);
-			mRenderer.setChartTitleTextSize(20);
-			mRenderer.setLabelsTextSize(15);
-			mRenderer.setLegendTextSize(15);
-			mRenderer.setPointSize(5f);
-			mRenderer.setXLabels(0);
-			mRenderer.setShowGrid(true);
-			mRenderer.setDisplayChartValues(false);
-			mRenderer.setChartTitle("");
-			mRenderer.setXTitle("Date");
-			mRenderer.setYTitle("");
-			mRenderer.setXAxisMin(0);
-			mRenderer.setAxesColor(Color.WHITE);
-			mRenderer.setLabelsColor(Color.WHITE);
+		XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
+		mRenderer.setAxisTitleTextSize(16);
+		mRenderer.setChartTitleTextSize(20);
+		mRenderer.setLabelsTextSize(15);
+		mRenderer.setLegendTextSize(15);
+		mRenderer.setPointSize(5f);
+		mRenderer.setXLabels(0);
+		mRenderer.setShowGrid(true);
+		mRenderer.setDisplayChartValues(false);
+		mRenderer.setChartTitle("");
+		mRenderer.setXTitle("Date");
+		mRenderer.setYTitle("");
+		mRenderer.setXAxisMin(0);
+		mRenderer.setAxesColor(Color.WHITE);
+		mRenderer.setLabelsColor(Color.WHITE);
 
-			mRenderer.setXAxisMax(cnt);
-			mRenderer.setYAxisMin(min - 5);
-			mRenderer.setYAxisMax(max);
+		mRenderer.setXAxisMax(cnt);
+		mRenderer.setYAxisMin(min - 5);
+		mRenderer.setYAxisMax(max);
 
-			r = new XYSeriesRenderer();
-			r.setColor(colors[k]);
-			r.setPointStyle(styles[k]);
-			r.setLineWidth(5);
-			r.setFillPoints(true);
-			mRenderer.addSeriesRenderer(r);
-			k++;
+		r = new XYSeriesRenderer();
+		r.setColor(colors[k]);
+		r.setPointStyle(styles[k]);
+		r.setLineWidth(5);
+		r.setFillPoints(true);
+		mRenderer.addSeriesRenderer(r);
+		k++;
 
-			r = new XYSeriesRenderer();
-			r.setColor(colors[k]);
-			r.setPointStyle(styles[k]);
-			r.setLineWidth(5);
-			r.setFillPoints(true);
-			mRenderer.addSeriesRenderer(r);
-			k++;
+		r = new XYSeriesRenderer();
+		r.setColor(colors[k]);
+		r.setPointStyle(styles[k]);
+		r.setLineWidth(5);
+		r.setFillPoints(true);
+		mRenderer.addSeriesRenderer(r);
+		k++;
 
-			r = new XYSeriesRenderer();
-			r.setColor(colors[k]);
-			r.setPointStyle(styles[k]);
-			r.setLineWidth(5);
-			r.setFillPoints(true);
-			mRenderer.addSeriesRenderer(r);
-			k++;
+		r = new XYSeriesRenderer();
+		r.setColor(colors[k]);
+		r.setPointStyle(styles[k]);
+		r.setLineWidth(5);
+		r.setFillPoints(true);
+		mRenderer.addSeriesRenderer(r);
+		k++;
 
-			r = new XYSeriesRenderer();
-			r.setColor(colors[k]);
-			r.setPointStyle(styles[k]);
-			r.setLineWidth(5);
-			r.setFillPoints(true);
-			mRenderer.addSeriesRenderer(r);
-			k++;
+		r = new XYSeriesRenderer();
+		r.setColor(colors[k]);
+		r.setPointStyle(styles[k]);
+		r.setLineWidth(5);
+		r.setFillPoints(true);
+		mRenderer.addSeriesRenderer(r);
+		k++;
 
-			r = new XYSeriesRenderer();
-			r.setColor(colors[k]);
-			r.setPointStyle(styles[k]);
-			r.setLineWidth(5);
-			r.setFillPoints(true);
-			mRenderer.addSeriesRenderer(r);
-			k++;
+		r = new XYSeriesRenderer();
+		r.setColor(colors[k]);
+		r.setPointStyle(styles[k]);
+		r.setLineWidth(5);
+		r.setFillPoints(true);
+		mRenderer.addSeriesRenderer(r);
+		k++;
 
-			r = new XYSeriesRenderer();
-			r.setColor(colors[k]);
-			r.setPointStyle(styles[k]);
-			r.setLineWidth(5);
-			r.setFillPoints(true);
-			mRenderer.addSeriesRenderer(r);
-		}
+		r = new XYSeriesRenderer();
+		r.setColor(colors[k]);
+		r.setPointStyle(styles[k]);
+		r.setLineWidth(5);
+		r.setFillPoints(true);
+		mRenderer.addSeriesRenderer(r);
 
-		BldPrsrLogger.i(TAG, SubTag + "(Add) mRenderer and mDataset are set");
 		GraphicalView mChartView;
 		try {
 			LinearLayout layout = (LinearLayout) findViewById(R.id.aChart);
@@ -444,7 +454,8 @@ public class BldPrsrMain extends Activity {
 					mDataset, mRenderer);
 			layout.removeAllViews();
 			layout.addView(mChartView, new LayoutParams(
-					LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+			layout.invalidate();
 		} catch (Exception e) {
 			BldPrsrLogger.e(TAG, SubTag + e.getMessage());
 		}
@@ -472,6 +483,11 @@ public class BldPrsrMain extends Activity {
 		SharedPreferences pref = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 		username = pref.getString(PREF_USERNAME, null);
 
+		SharedPreferences SP = PreferenceManager.
+				getDefaultSharedPreferences(getBaseContext());
+
+		mainscreendisplay = SP.getString("mainscreendisplay","1");
+		
 		this.setTitle("User: " + username);
 
 		/* Get current date */
@@ -482,7 +498,7 @@ public class BldPrsrMain extends Activity {
 		String evYearS = String.format("%04d", mYear);
 		String evMonthS = String.format("%02d", mMonth);
 		String evDayS = String.format("%02d", mDay);
-		String dateStr = evYearS + "/" + evMonthS + "/" + evDayS;
+		String dateStr = evYearS + "-" + evMonthS + "-" + evDayS;
 /*
 		final int mHour = c.get(Calendar.HOUR_OF_DAY);
 		final int mMinutes = c.get(Calendar.MINUTE);
@@ -519,7 +535,22 @@ public class BldPrsrMain extends Activity {
 				if (s.length() <= 3 && d.length() <= 3 && p.length() <= 3) {
 					ContentValues vals = new ContentValues();
 					vals.put("name", username);
-					vals.put("mDate", dateB.getText().toString());
+					String dateOut = dateB.getText().toString();
+					int delimeter;
+					try {
+						dateOut.substring('/');
+						delimeter = '/';
+					} catch(Exception e) {
+						delimeter = '-';
+					}
+					vals.put("mDate", dateOut);
+					String evYear = dateOut.substring(0, 4);
+					dateOut = dateOut.substring(5);
+					String evMonth = dateOut.substring(0,dateOut.indexOf(delimeter));
+					vals.put("mMonth", evMonth);
+					String evDay = dateOut.substring(dateOut.indexOf(delimeter)+1);
+					vals.put("mDay", evDay);
+					vals.put("mYear", evYear);
 					vals.put("mTime", "00:00");
 					vals.put("dPrsr", dPr.getText().toString());
 					vals.put("sPrsr", sPr.getText().toString());
@@ -548,7 +579,7 @@ public class BldPrsrMain extends Activity {
 			String evMonthS = String.format("%02d", monthOfYear + 1);
 			String evDayS = String.format("%02d", dayOfMonth);
 
-			eventDate = evYearS + "/" + evMonthS + "/" + evDayS;
+			eventDate = evYearS + "-" + evMonthS + "-" + evDayS;
 			dateB.setText(eventDate);
 		}
 	};

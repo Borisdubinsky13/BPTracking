@@ -4,7 +4,9 @@
 package com.BldPrsr;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.backup.BackupManager;
 import android.content.ContentValues;
@@ -25,7 +27,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
 	public static String SubTag;
 
 	private static final String DATABASE_NAME = "bldprsr.db";
-	private static final int DATABASE_VERSION = 5;
+	private static final int DATABASE_VERSION = 6;
 
 	private static final String BPDATA_TABLE_NAME = "bpData";
 	private static final String ID_KEY = "_id";
@@ -145,15 +147,14 @@ public class MyDbHelper extends SQLiteOpenHelper {
 						vals.put("name",
 								from.getString(from.getColumnIndex("name")));
 						mDate = from.getString(from.getColumnIndex("mDate"));
-						vals.put("mDate", mDate);
 						// Split up date into day, month, year
 						BldPrsrLogger.i(TAG, SubTag + "Date: " + mDate);
 						// Get the month
 						String Year = mDate.substring(0, 4);
 						vals.put("mYear", Year);
-						String Month = mDate.substring(6, 2);
-						vals.put("mYear", Month);
-						String Day = mDate.substring(9, 2);
+						String Month = mDate.substring(5, 7);
+						vals.put("mMonth", Month);
+						String Day = mDate.substring(8, 10);
 						vals.put("mDay", Day);
 						vals.put("sPrsr",
 								from.getString(from.getColumnIndex("dPrsr")));
@@ -168,6 +169,8 @@ public class MyDbHelper extends SQLiteOpenHelper {
 							newTmStr = "00:00";
 						}
 						vals.put("mTime", newTmStr);
+						mDate = Year.toString() + "-" + Month.toString() + "-" + Day.toString();
+						vals.put("mDate", mDate);
 					}
 					db.insert(BPDATA_TABLE_NAME, null, vals);
 				} while (from.moveToNext());
@@ -213,6 +216,116 @@ public class MyDbHelper extends SQLiteOpenHelper {
 		}
 	}
 
+	public List<BldPrsrBasicData> getCurrentMonthData() {
+		List<BldPrsrBasicData> dataList = new ArrayList<BldPrsrBasicData>();
+		SubTag = "getCurrentMonthData(): ";
+		// Get current month
+		Calendar c = Calendar.getInstance();
+		Integer year = c.get(Calendar.YEAR);
+		Integer month = c.get(Calendar.MONTH);
+		String m = String.format(Locale.getDefault(), "%02d", month);
+		String selectQuery = "SELECT * FROM " + BPDATA_TABLE_NAME +
+				" WHERE mYear = '" + year.toString() + "' AND mMonth = '" 
+				+ m + "';"; 
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, null);
+
+		// looping through all rows and adding to list
+		if (cursor.moveToFirst()) {
+			do {
+				BldPrsrBasicData basicData = new BldPrsrBasicData();
+				basicData.setId(cursor.getString(cursor
+						.getColumnIndex(ID_KEY)));
+				basicData.setName(cursor.getString(cursor
+						.getColumnIndex(NAME_KEY)));
+				basicData.setdPrsr(cursor.getString(cursor
+						.getColumnIndex(DPRSR_KEY)));
+				basicData.setsPrsr(cursor.getString(cursor
+						.getColumnIndex(SPRSR_KEY)));
+				basicData.setPulse(cursor.getString(cursor
+						.getColumnIndex(PULSE_KEY)));
+				basicData.setmDate(cursor.getString(cursor
+						.getColumnIndex(MDATE_KEY)));
+				basicData.setmTime(cursor.getString(cursor
+						.getColumnIndex(MTIME_KEY)));
+
+				// Starting with v5 of DB
+				basicData.setmDay(cursor.getString(cursor
+						.getColumnIndex(MDATE_DAY_KEY)));
+				basicData.setmMonth(cursor.getString(cursor
+						.getColumnIndex(MDATE_MONTH_KEY)));
+				basicData.setmYear(cursor.getString(cursor
+						.getColumnIndex(MDATE_YEAR_KEY)));
+				basicData.setmHours(cursor.getString(cursor
+						.getColumnIndex(MTIME_HOURS_KEY)));
+				basicData.setmMinutes(cursor.getString(cursor
+						.getColumnIndex(MTIME_MINS_KEY)));
+
+				// Adding basic data to list
+				dataList.add(basicData);
+			} while (cursor.moveToNext());
+		}		
+		try {
+		} catch (Exception e) {
+			BldPrsrLogger.e(TAG, SubTag + e.getMessage());
+		}
+		return dataList;
+	}
+	public List<BldPrsrBasicData> getLast30EntriesData() {
+		List<BldPrsrBasicData> dataList = new ArrayList<BldPrsrBasicData>();
+		SubTag = "getLast30EntriesData(): ";
+
+		String selectQuery = "SELECT * FROM " + BPDATA_TABLE_NAME;
+		
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, null);
+		// Which entry should we start with
+		int	startEntry = cursor.getCount() - 30;
+		if (startEntry < 0)
+			startEntry = 0;
+		BldPrsrLogger.e(TAG, SubTag + "Starting with record number " + startEntry);		
+		// looping through all rows and adding to list
+		if (cursor.move(startEntry)) {
+			do {
+				BldPrsrBasicData basicData = new BldPrsrBasicData();
+				basicData.setId(cursor.getString(cursor
+						.getColumnIndex(ID_KEY)));
+				basicData.setName(cursor.getString(cursor
+						.getColumnIndex(NAME_KEY)));
+				basicData.setdPrsr(cursor.getString(cursor
+						.getColumnIndex(DPRSR_KEY)));
+				basicData.setsPrsr(cursor.getString(cursor
+						.getColumnIndex(SPRSR_KEY)));
+				basicData.setPulse(cursor.getString(cursor
+						.getColumnIndex(PULSE_KEY)));
+				basicData.setmDate(cursor.getString(cursor
+						.getColumnIndex(MDATE_KEY)));
+				basicData.setmTime(cursor.getString(cursor
+						.getColumnIndex(MTIME_KEY)));
+
+				// Starting with v5 of DB
+				basicData.setmDay(cursor.getString(cursor
+						.getColumnIndex(MDATE_DAY_KEY)));
+				basicData.setmMonth(cursor.getString(cursor
+						.getColumnIndex(MDATE_MONTH_KEY)));
+				basicData.setmYear(cursor.getString(cursor
+						.getColumnIndex(MDATE_YEAR_KEY)));
+				basicData.setmHours(cursor.getString(cursor
+						.getColumnIndex(MTIME_HOURS_KEY)));
+				basicData.setmMinutes(cursor.getString(cursor
+						.getColumnIndex(MTIME_MINS_KEY)));
+
+				// Adding basic data to list
+				dataList.add(basicData);
+			} while (cursor.moveToNext());
+		}		
+		try {
+		} catch (Exception e) {
+			BldPrsrLogger.e(TAG, SubTag + e.getMessage());
+		}
+		return dataList;
+	}
+	
 	public List<BldPrsrBasicData> getAllData() {
 		List<BldPrsrBasicData> dataList = new ArrayList<BldPrsrBasicData>();
 		SubTag = "getAllData(): ";
