@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-	<PreferenceCategory
+<PreferenceCategory
 		android:title="Settings">
 	    <EditTextPreference 
 	        android:title="@string/DocEmail" 
@@ -8,5 +8,11 @@
 	        android:dialogMessage="Where to send the report"
 	        android:summary="Your Doctor's email"
 	        android:key="DocEmail"/>
+  			<ListPreference android:title="Main screen"
+                      android:summary="Select the kind of data that you would like to see on main screen"
+                      android:key="mainscreendisplay"
+                      android:defaultValue="1"
+                      android:entries="@array/dispMainArray"
+                      android:entryValues="@array/dispValues" />
 	</PreferenceCategory>
 </PreferenceScreen>

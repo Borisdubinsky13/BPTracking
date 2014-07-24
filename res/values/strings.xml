@@ -55,4 +55,7 @@
 	<string name="report">Report</string>
 	<string name="Settings">Settings</string>
 	<string name="DocEmail">Doctor\'s E-Mail</string>
+	<string name="period2display">Period to display</string>
+	<string name="displayAll">Display all values</string>
+	<string name="displayThisMonth">DIsplay current month</string>
 </resources>

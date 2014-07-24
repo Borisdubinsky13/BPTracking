@@ -117,28 +117,30 @@ public class BldPrsrFilterScreen extends Activity {
 		});
 	}
 
-	private DatePickerDialog.OnDateSetListener mStartDateSetListener = new DatePickerDialog.OnDateSetListener() {
+	private DatePickerDialog.OnDateSetListener mStartDateSetListener = 
+			new DatePickerDialog.OnDateSetListener() {
 		// onDateSet method
 		public void onDateSet(DatePicker view, int year, int monthOfYear,
 				int dayOfMonth) {
 			evYearS = String.format("%04d", year);
 			evMonthS = String.format("%02d", monthOfYear + 1);
 			evDayS = String.format("%02d", dayOfMonth);
-			String dateStr = evYearS + "/" + evMonthS + "/" + evDayS;
+			String dateStr = evYearS + "-" + evMonthS + "-" + evDayS;
 			StartDateB.setText(dateStr);
-			startSearchDate = evYearS + "/" + evMonthS + "/" + evDayS;
+			startSearchDate = evYearS + "-" + evMonthS + "-" + evDayS;
 		}
 	};
-	private DatePickerDialog.OnDateSetListener mEndDateSetListener = new DatePickerDialog.OnDateSetListener() {
+	private DatePickerDialog.OnDateSetListener mEndDateSetListener = 
+			new DatePickerDialog.OnDateSetListener() {
 		// onDateSet method
 		public void onDateSet(DatePicker view, int year, int monthOfYear,
 				int dayOfMonth) {
 			evYearS = String.format("%04d", year);
 			evMonthS = String.format("%02d", monthOfYear + 1);
 			evDayS = String.format("%02d", dayOfMonth);
-			String dateStr = evYearS + "/" + evMonthS + "/" + evDayS;
+			String dateStr = evYearS + "-" + evMonthS + "-" + evDayS;
 			EndDateB.setText(dateStr);
-			endSearchDate = evYearS + "/" + evMonthS + "/" + evDayS;
+			endSearchDate = evYearS + "-" + evMonthS + "-" + evDayS;
 
 		}
 	};

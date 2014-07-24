@@ -58,8 +58,7 @@ public class BldPrsrSetupWin extends Activity
         addB.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v) 
-            {
-            	
+            {          	
             	ContentValues	vals = new ContentValues();
             	EditText nm = (EditText)findViewById(R.id.nameSup);
             	EditText fn = (EditText)findViewById(R.id.fstName);

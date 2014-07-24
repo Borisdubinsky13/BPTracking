@@ -136,13 +136,15 @@ public class ImportActivity extends Activity {
 								 */
 								ContentValues vals = new ContentValues();
 								vals.put("name", username);
-								vals.put("mDate", evYear + "/" + evMonth + "/"
-										+ evDay);
+								vals.put("mDate", evYear + "-" + evMonth + "-" + evDay);
 								vals.put("mTime", evHour + ":" + evMins);
 								vals.put("dPrsr", diast);
 								vals.put("sPrsr", syst);
 								vals.put("pulse", pulse);
-
+								vals.put("mDay", evDay);
+								vals.put("mMonth", evMonth);
+								vals.put("mYear", evYear);
+								
 								db.insert(vals);
 
 								Log.i(TAG, SubTag + "Inserting a record");

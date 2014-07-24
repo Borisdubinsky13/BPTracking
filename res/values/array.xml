@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string-array name="dispMainArray">
+	<item>All data</item>
+	<item>Current month</item>
+	<item>Last 30 entries</item>
+</string-array>
+<string-array name="dispValues">
+    <item>1</item>
+    <item>2</item>
+    <item>3</item>
+</string-array>
+</resources>

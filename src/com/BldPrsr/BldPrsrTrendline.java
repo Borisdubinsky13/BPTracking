@@ -135,21 +135,15 @@ public class BldPrsrTrendline
    	
     	delta = (this.End - this.Start)/(double)this.count;
     	
-    	BldPrsrLogger.i(TAG, SubTag + "start: " + this.Start + " end: " + this.End + " delta: " + delta );
     	trendVals.add(0, this.Start);
-    	BldPrsrLogger.i(TAG, SubTag + "Add: 0," + this.Start );
-    	BldPrsrLogger.i(TAG, SubTag + "Adding " + this.count + " entries");
     	// trendVals.add(1, val);
     	for ( i = 1; i < this.count; i++ )
     	{
     		val += delta;
-    		BldPrsrLogger.i(TAG, SubTag + "Add: " + i + "," + val);
     		// trendVals.add(i, val);
     	}
     	// trendVals.add(i, val);
-    	BldPrsrLogger.i(TAG, SubTag + "Add: " + i + "," + this.End );
     	trendVals.add(i, this.End);
-    	BldPrsrLogger.i(TAG, SubTag + "Number of entries: " + trendVals.getItemCount());
     	return trendVals;
     }
 }
