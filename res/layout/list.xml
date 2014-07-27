@@ -10,7 +10,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         ads:adSize="BANNER"
-		ads:adUnitId="a14d18e1cd0e067"/>
+		ads:adUnitId="ca-app-pub-7354433000620160/6827318542"/>
     <LinearLayout 
     	android:layout_width="fill_parent"
     	android:orientation="horizontal"
