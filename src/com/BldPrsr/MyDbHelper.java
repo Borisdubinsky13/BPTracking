@@ -27,7 +27,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
 	public static String SubTag;
 
 	private static final String DATABASE_NAME = "bldprsr.db";
-	private static final int DATABASE_VERSION = 6;
+	private static final int DATABASE_VERSION = 7;
 
 	private static final String BPDATA_TABLE_NAME = "bpData";
 	private static final String ID_KEY = "_id";
@@ -156,10 +156,17 @@ public class MyDbHelper extends SQLiteOpenHelper {
 						vals.put("mMonth", Month);
 						String Day = mDate.substring(8, 10);
 						vals.put("mDay", Day);
-						vals.put("sPrsr",
-								from.getString(from.getColumnIndex("dPrsr")));
-						vals.put("dPrsr",
-								from.getString(from.getColumnIndex("sPrsr")));
+						if (oldVersion == 6) {
+							vals.put("sPrsr", from.getString(from
+									.getColumnIndex("sPrsr")));
+							vals.put("dPrsr", from.getString(from
+									.getColumnIndex("dPrsr")));
+						} else {
+							vals.put("sPrsr", from.getString(from
+									.getColumnIndex("dPrsr")));
+							vals.put("dPrsr", from.getString(from
+									.getColumnIndex("sPrsr")));
+						}
 						vals.put("pulse",
 								from.getString(from.getColumnIndex("pulse")));
 						if (oldVersion >= 4) {
@@ -169,7 +176,8 @@ public class MyDbHelper extends SQLiteOpenHelper {
 							newTmStr = "00:00";
 						}
 						vals.put("mTime", newTmStr);
-						mDate = Year.toString() + "-" + Month.toString() + "-" + Day.toString();
+						mDate = Year.toString() + "-" + Month.toString() + "-"
+								+ Day.toString();
 						vals.put("mDate", mDate);
 					}
 					db.insert(BPDATA_TABLE_NAME, null, vals);
@@ -224,9 +232,9 @@ public class MyDbHelper extends SQLiteOpenHelper {
 		Integer year = c.get(Calendar.YEAR);
 		Integer month = c.get(Calendar.MONTH);
 		String m = String.format(Locale.getDefault(), "%02d", month);
-		String selectQuery = "SELECT * FROM " + BPDATA_TABLE_NAME +
-				" WHERE mYear = '" + year.toString() + "' AND mMonth = '" 
-				+ m + "';"; 
+		String selectQuery = "SELECT * FROM " + BPDATA_TABLE_NAME
+				+ " WHERE mYear = '" + year.toString() + "' AND mMonth = '" + m
+				+ "';";
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -234,8 +242,8 @@ public class MyDbHelper extends SQLiteOpenHelper {
 		if (cursor.moveToFirst()) {
 			do {
 				BldPrsrBasicData basicData = new BldPrsrBasicData();
-				basicData.setId(cursor.getString(cursor
-						.getColumnIndex(ID_KEY)));
+				basicData
+						.setId(cursor.getString(cursor.getColumnIndex(ID_KEY)));
 				basicData.setName(cursor.getString(cursor
 						.getColumnIndex(NAME_KEY)));
 				basicData.setdPrsr(cursor.getString(cursor
@@ -264,32 +272,34 @@ public class MyDbHelper extends SQLiteOpenHelper {
 				// Adding basic data to list
 				dataList.add(basicData);
 			} while (cursor.moveToNext());
-		}		
+		}
 		try {
 		} catch (Exception e) {
 			BldPrsrLogger.e(TAG, SubTag + e.getMessage());
 		}
 		return dataList;
 	}
+
 	public List<BldPrsrBasicData> getLast30EntriesData() {
 		List<BldPrsrBasicData> dataList = new ArrayList<BldPrsrBasicData>();
 		SubTag = "getLast30EntriesData(): ";
 
 		String selectQuery = "SELECT * FROM " + BPDATA_TABLE_NAME;
-		
+
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, null);
 		// Which entry should we start with
-		int	startEntry = cursor.getCount() - 30;
+		int startEntry = cursor.getCount() - 30;
 		if (startEntry < 0)
 			startEntry = 0;
-		BldPrsrLogger.e(TAG, SubTag + "Starting with record number " + startEntry);		
+		BldPrsrLogger.e(TAG, SubTag + "Starting with record number "
+				+ startEntry);
 		// looping through all rows and adding to list
 		if (cursor.move(startEntry)) {
 			do {
 				BldPrsrBasicData basicData = new BldPrsrBasicData();
-				basicData.setId(cursor.getString(cursor
-						.getColumnIndex(ID_KEY)));
+				basicData
+						.setId(cursor.getString(cursor.getColumnIndex(ID_KEY)));
 				basicData.setName(cursor.getString(cursor
 						.getColumnIndex(NAME_KEY)));
 				basicData.setdPrsr(cursor.getString(cursor
@@ -318,14 +328,14 @@ public class MyDbHelper extends SQLiteOpenHelper {
 				// Adding basic data to list
 				dataList.add(basicData);
 			} while (cursor.moveToNext());
-		}		
+		}
 		try {
 		} catch (Exception e) {
 			BldPrsrLogger.e(TAG, SubTag + e.getMessage());
 		}
 		return dataList;
 	}
-	
+
 	public List<BldPrsrBasicData> getAllData() {
 		List<BldPrsrBasicData> dataList = new ArrayList<BldPrsrBasicData>();
 		SubTag = "getAllData(): ";
