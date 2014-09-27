@@ -72,7 +72,7 @@ public class BldPrsrMain extends Activity {
 	private Handler mHandler = new Handler();
 	private ProgressDialog progressDialog;
 	private int currentCount;
-	
+
 	private String mainscreendisplay;
 
 	String eventDate;
@@ -110,8 +110,8 @@ public class BldPrsrMain extends Activity {
 			startActivity(importAct);
 			return true;
 		case R.id.Settings:
-            Intent iPrefs = new Intent(this, BldPrsrPrefActivity.class);
-            startActivity(iPrefs);
+			Intent iPrefs = new Intent(this, BldPrsrPrefActivity.class);
+			startActivity(iPrefs);
 			return true;
 		case R.id.Export:
 			try {
@@ -361,7 +361,7 @@ public class BldPrsrMain extends Activity {
 		}
 
 		BldPrsrLogger.i(TAG, SubTag + "Processed " + cnt + " entries");
-		
+
 		mDataset.addSeries(diastolic);
 		mDataset.addSeries(systolic);
 		mDataset.addSeries(sPulse);
@@ -454,7 +454,7 @@ public class BldPrsrMain extends Activity {
 					mDataset, mRenderer);
 			layout.removeAllViews();
 			layout.addView(mChartView, new LayoutParams(
-				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+					LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 			layout.invalidate();
 		} catch (Exception e) {
 			BldPrsrLogger.e(TAG, SubTag + e.getMessage());
@@ -471,23 +471,22 @@ public class BldPrsrMain extends Activity {
 		setContentView(R.layout.bldprsmain);
 
 		AdView adView = (AdView) findViewById(R.id.adDataAnalysis);
-	    AdRequest adRequest = new AdRequest.Builder()
-			.addTestDevice("1C9D5807CADB9259EB3804DDC582DC3C")
-			.addTestDevice("5AECA86F6A4E6EB1C1B6907DDFB5086D")
-			.build();
-	    // Load the adView with the ad request.
-	    adView.loadAd(adRequest);
+		AdRequest adRequest = new AdRequest.Builder()
+				.addTestDevice("1C9D5807CADB9259EB3804DDC582DC3C")
+				.addTestDevice("5AECA86F6A4E6EB1C1B6907DDFB5086D").build();
+		// Load the adView with the ad request.
+		adView.loadAd(adRequest);
 
 		final Calendar c = Calendar.getInstance();
 
 		SharedPreferences pref = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 		username = pref.getString(PREF_USERNAME, null);
 
-		SharedPreferences SP = PreferenceManager.
-				getDefaultSharedPreferences(getBaseContext());
+		SharedPreferences SP = PreferenceManager
+				.getDefaultSharedPreferences(getBaseContext());
 
-		mainscreendisplay = SP.getString("mainscreendisplay","1");
-		
+		mainscreendisplay = SP.getString("mainscreendisplay", "1");
+
 		this.setTitle("User: " + username);
 
 		/* Get current date */
@@ -499,13 +498,13 @@ public class BldPrsrMain extends Activity {
 		String evMonthS = String.format("%02d", mMonth);
 		String evDayS = String.format("%02d", mDay);
 		String dateStr = evYearS + "-" + evMonthS + "-" + evDayS;
-/*
-		final int mHour = c.get(Calendar.HOUR_OF_DAY);
-		final int mMinutes = c.get(Calendar.MINUTE);
-		
-		String evHour = String.format("%02d", mHour);
-		String evMinutes = String.format("%02d", mMinutes);
-*/
+		/*
+		 * final int mHour = c.get(Calendar.HOUR_OF_DAY); final int mMinutes =
+		 * c.get(Calendar.MINUTE);
+		 * 
+		 * String evHour = String.format("%02d", mHour); String evMinutes =
+		 * String.format("%02d", mMinutes);
+		 */
 		Log.d(TAG, SubTag + "Refreshing the chart....");
 		displayCharts();
 
@@ -540,18 +539,30 @@ public class BldPrsrMain extends Activity {
 					try {
 						dateOut.substring('/');
 						delimeter = '/';
-					} catch(Exception e) {
+					} catch (Exception e) {
 						delimeter = '-';
 					}
 					vals.put("mDate", dateOut);
 					String evYear = dateOut.substring(0, 4);
 					dateOut = dateOut.substring(5);
-					String evMonth = dateOut.substring(0,dateOut.indexOf(delimeter));
+					String evMonth = dateOut.substring(0,
+							dateOut.indexOf(delimeter));
 					vals.put("mMonth", evMonth);
-					String evDay = dateOut.substring(dateOut.indexOf(delimeter)+1);
+					String evDay = dateOut.substring(dateOut.indexOf(delimeter) + 1);
 					vals.put("mDay", evDay);
 					vals.put("mYear", evYear);
 					vals.put("mTime", "00:00");
+					// Systolic value is always lower then diastolic
+					Integer sInt = Integer.parseInt(s);
+					Integer dInt = Integer.parseInt(d);
+					if (sInt > dInt) {
+						int t = dInt;
+						dInt = sInt;
+						sInt = t;
+					}
+					vals.put("sPrsr", sInt.toString());
+					vals.put("dPrsr", dInt.toString());
+
 					vals.put("dPrsr", dPr.getText().toString());
 					vals.put("sPrsr", sPr.getText().toString());
 					vals.put("pulse", pulse.getText().toString());

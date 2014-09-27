@@ -27,7 +27,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
 	public static String SubTag;
 
 	private static final String DATABASE_NAME = "bldprsr.db";
-	private static final int DATABASE_VERSION = 7;
+	private static final int DATABASE_VERSION = 8;
 
 	private static final String BPDATA_TABLE_NAME = "bpData";
 	private static final String ID_KEY = "_id";
@@ -48,6 +48,10 @@ public class MyDbHelper extends SQLiteOpenHelper {
 	public MyDbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		bkpMgm = new BackupManager(context);
+	}
+
+	public int version() {
+		return DATABASE_VERSION;
 	}
 
 	/**
@@ -156,17 +160,20 @@ public class MyDbHelper extends SQLiteOpenHelper {
 						vals.put("mMonth", Month);
 						String Day = mDate.substring(8, 10);
 						vals.put("mDay", Day);
-						if (oldVersion == 6) {
-							vals.put("sPrsr", from.getString(from
-									.getColumnIndex("sPrsr")));
-							vals.put("dPrsr", from.getString(from
-									.getColumnIndex("dPrsr")));
-						} else {
-							vals.put("sPrsr", from.getString(from
-									.getColumnIndex("dPrsr")));
-							vals.put("dPrsr", from.getString(from
-									.getColumnIndex("sPrsr")));
+
+						// Systolic value is always lower then diastolic
+						Integer s = Integer.parseInt(from.getString(from
+								.getColumnIndex("sPrsr")));
+						Integer d = Integer.parseInt(from.getString(from
+								.getColumnIndex("dPrsr")));
+						if (s > d) {
+							int t = d;
+							d = s;
+							s = t;
 						}
+						vals.put("sPrsr", s.toString());
+						vals.put("dPrsr", d.toString());
+
 						vals.put("pulse",
 								from.getString(from.getColumnIndex("pulse")));
 						if (oldVersion >= 4) {

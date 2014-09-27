@@ -136,15 +136,26 @@ public class ImportActivity extends Activity {
 								 */
 								ContentValues vals = new ContentValues();
 								vals.put("name", username);
-								vals.put("mDate", evYear + "-" + evMonth + "-" + evDay);
+								vals.put("mDate", evYear + "-" + evMonth + "-"
+										+ evDay);
 								vals.put("mTime", evHour + ":" + evMins);
-								vals.put("dPrsr", diast);
-								vals.put("sPrsr", syst);
+
+								// Systolic value is always lower then diastolic
+								Integer s = Integer.parseInt(syst);
+								Integer d = Integer.parseInt(diast);
+								if (s > d) {
+									int t = d;
+									d = s;
+									s = t;
+								}
+								vals.put("sPrsr", s.toString());
+								vals.put("dPrsr", d.toString());
+
 								vals.put("pulse", pulse);
 								vals.put("mDay", evDay);
 								vals.put("mMonth", evMonth);
 								vals.put("mYear", evYear);
-								
+
 								db.insert(vals);
 
 								Log.i(TAG, SubTag + "Inserting a record");
