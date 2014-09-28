@@ -16,6 +16,23 @@
 			<TextView
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
+				android:text="R-9.1 (DB Version: 9):" android:textSize="20sp" android:textStyle="bold"
+			/>
+		</TableRow>
+	    <TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:text="- Swipe Systolic values with Diastolic values"
+			    android:textSize="16sp" />
+		</TableRow>
+		<TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView> </TextView>
+		</TableRow>
+	    <TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
 				android:text="R-8.1 (DB Version: 8):" android:textSize="20sp" android:textStyle="bold"
 			/>
 		</TableRow>
@@ -23,7 +40,7 @@
 			<TextView
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
-			    android:text="- Make Systolic values always larger the Diastolic!"
+			    android:text="- Make Systolic values always larger the Diastolic"
 			    android:textSize="16sp" />
 		</TableRow>
 		<TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content">
@@ -41,7 +58,7 @@
 			<TextView
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
-			    android:text="- Fix reversal of Distolic and Systolic values!"
+			    android:text="- Fix reversal of Distolic and Systolic values"
 			    android:textSize="16sp" />
 		</TableRow>
 		<TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content">

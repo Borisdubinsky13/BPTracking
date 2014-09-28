@@ -312,7 +312,7 @@ public class BldPrsrMain extends Activity {
 
 			int dValue;
 			try {
-				dValue = Integer.parseInt(bd.getdPrsr());
+				dValue = Integer.parseInt(bd.getsPrsr());
 			} catch (Exception e) {
 				BldPrsrLogger.e(TAG, SubTag + e.getMessage());
 				dValue = 0;
@@ -331,7 +331,7 @@ public class BldPrsrMain extends Activity {
 			}
 
 			try {
-				dValue = Integer.parseInt(bd.getsPrsr());
+				dValue = Integer.parseInt(bd.getdPrsr());
 			} catch (Exception e) {
 				BldPrsrLogger.e(TAG, SubTag + e.getMessage());
 				dValue = 0;
@@ -552,10 +552,10 @@ public class BldPrsrMain extends Activity {
 					vals.put("mDay", evDay);
 					vals.put("mYear", evYear);
 					vals.put("mTime", "00:00");
-					// Systolic value is always lower then diastolic
+					// Systolic value is always higher then diastolic
 					Integer sInt = Integer.parseInt(s);
 					Integer dInt = Integer.parseInt(d);
-					if (sInt > dInt) {
+					if (dInt > dInt) {
 						int t = dInt;
 						dInt = sInt;
 						sInt = t;

@@ -143,7 +143,7 @@ public class ImportActivity extends Activity {
 								// Systolic value is always lower then diastolic
 								Integer s = Integer.parseInt(syst);
 								Integer d = Integer.parseInt(diast);
-								if (s > d) {
+								if (s < d) {
 									int t = d;
 									d = s;
 									s = t;

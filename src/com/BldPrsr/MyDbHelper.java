@@ -27,7 +27,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
 	public static String SubTag;
 
 	private static final String DATABASE_NAME = "bldprsr.db";
-	private static final int DATABASE_VERSION = 8;
+	private static final int DATABASE_VERSION = 9;
 
 	private static final String BPDATA_TABLE_NAME = "bpData";
 	private static final String ID_KEY = "_id";
@@ -166,7 +166,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
 								.getColumnIndex("sPrsr")));
 						Integer d = Integer.parseInt(from.getString(from
 								.getColumnIndex("dPrsr")));
-						if (s > d) {
+						if (s < d) {
 							int t = d;
 							d = s;
 							s = t;
