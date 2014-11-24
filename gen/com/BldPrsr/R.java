@@ -9,6 +9,8 @@ package com.BldPrsr;
 
 public final class R {
     public static final class array {
+        public static final int ChartsListName=0x7f0a0003;
+        public static final int ChartsListValues=0x7f0a0002;
         public static final int dispMainArray=0x7f0a0000;
         public static final int dispValues=0x7f0a0001;
     }
@@ -520,6 +522,7 @@ containing a value of this type.
     public static final class string {
         public static final int AddResName=0x7f06002a;
         public static final int Cancel=0x7f060038;
+        public static final int ChartsList=0x7f060059;
         public static final int CleanDBStr=0x7f060043;
         public static final int Date=0x7f06004c;
         public static final int Delete=0x7f06004d;

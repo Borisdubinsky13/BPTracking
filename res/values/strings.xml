@@ -58,4 +58,5 @@
 	<string name="period2display">Period to display</string>
 	<string name="displayAll">Display all values</string>
 	<string name="displayThisMonth">DIsplay current month</string>
+	<string name="ChartsList">Charts to display</string>
 </resources>

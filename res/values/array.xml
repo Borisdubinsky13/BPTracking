@@ -10,4 +10,18 @@
     <item>2</item>
     <item>3</item>
 </string-array>
+<string-array name="ChartsListValues">
+    <item>1</item>
+    <item>2</item>
+    <item>3</item>
+    <item>4</item>
+    <item>5 Index</item>
+</string-array>
+<string-array name="ChartsListName">
+    <item>Systolic</item>
+    <item>Diastolic</item>
+    <item>Pulse</item>
+    <item>Weight</item>
+    <item>BMI Index</item>
+</string-array>
 </resources>
